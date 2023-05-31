@@ -1,3 +1,4 @@
+from functools import partial
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox as mb
@@ -5,8 +6,8 @@ import db
 from models.usuarios import Usuario
 from administracion_audiovisual import add_pelicula, add_serie, editar_Serie, editar_Peli
 from administracion_usuarios import gestion_usuarios
-from clientes_busquedas import buscar_serie, buscar_peli
-from clientes_catalogos import catalogo_peliculas, catalogo_series, graficas
+from clientes_busquedas import buscar_audiovisual
+from clientes_catalogos import catalogos, graficas
 
 root = Tk()
 nombreUsuario = StringVar()
@@ -26,9 +27,9 @@ def interfazUsuario():
     titulo = Label(mainFrame, text="Login de Usuarios", font=("Arial", 36))
     titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=2)
 
-    nombreLabel = Label(mainFrame, text="Nombre: ")
+    nombreLabel = Label(mainFrame, text="Nombre ")
     nombreLabel.grid(column=0, row=1)
-    passLabel = Label(mainFrame, text="Contraseña: ")
+    passLabel = Label(mainFrame, text="Contraseña ")
     passLabel.grid(column=0, row=2)
 
     # Entradas de texto
@@ -127,17 +128,17 @@ def clientes(nombre):
     titulo = Label(ventana_usuarios, text=f"Usuario {nombre}", font=("Arial", 36))
     titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
 
-    buscarPeli = ttk.Button(ventana_usuarios, text="Buscar Peliculas", command=buscar_peli)
-    buscarPeli.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
+    button_buscar_peli = ttk.Button(ventana_usuarios, text="Buscar Peliculas", command=partial(buscar_audiovisual, "peliculas"))
+    button_buscar_peli.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    buscarSerie = ttk.Button(ventana_usuarios, text="Buscar Series", command=buscar_serie)
-    buscarSerie.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
+    button_buscarSerie = ttk.Button(ventana_usuarios, text="Buscar Series", command=partial(buscar_audiovisual, "series"))
+    button_buscarSerie.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    catalogos_peliculas = ttk.Button(ventana_usuarios, text="Catalogo de peliculas", command=catalogo_peliculas)
-    catalogos_peliculas.grid(column=0, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
+    button_catalogos_peliculas = ttk.Button(ventana_usuarios, text="Catalogo de peliculas", command=partial(catalogos, "pelicula"))
+    button_catalogos_peliculas.grid(column=0, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    catalogos_series = ttk.Button(ventana_usuarios, text="Catalogo de Series", command=catalogo_series)
-    catalogos_series.grid(column=1, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
+    button_catalogos_series = ttk.Button(ventana_usuarios, text="Catalogo de Series", command=partial(catalogos, "serie"))
+    button_catalogos_series.grid(column=1, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
     graficas_visionado = ttk.Button(ventana_usuarios, text="Graficas de visionado", command=graficas)
     graficas_visionado.grid(column=0, row=3, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=4)
