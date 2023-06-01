@@ -1,13 +1,13 @@
-from functools import partial
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox as mb
+from functools import partial
 import db
 from models.usuarios import Usuario
 from administracion_audiovisual import add_pelicula, add_serie, editar_Serie, editar_Peli
 from administracion_usuarios import gestion_usuarios
 from clientes_busquedas import buscar_audiovisual
-from clientes_catalogos import catalogos, graficas
+from clientes_catalogos import catalogos, grafica_tiempo, grafica_vision
 
 root = Tk()
 nombreUsuario = StringVar()
@@ -140,8 +140,11 @@ def clientes(nombre):
     button_catalogos_series = ttk.Button(ventana_usuarios, text="Catalogo de Series", command=partial(catalogos, "serie"))
     button_catalogos_series.grid(column=1, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    graficas_visionado = ttk.Button(ventana_usuarios, text="Graficas de visionado", command=graficas)
+    graficas_visionado = ttk.Button(ventana_usuarios, text="Graficas de visionado", command=grafica_vision)
     graficas_visionado.grid(column=0, row=3, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=4)
+
+    graficas_tiempo = ttk.Button(ventana_usuarios, text="Graficas de tiempo", command=grafica_tiempo)
+    graficas_tiempo.grid(column=0, row=4, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=4)
 
     boton_salir = ttk.Button(ventana_usuarios, text="Salir", command=lambda: ventana_usuarios.destroy())
     boton_salir.grid(column=0, row=5, sticky=E + W, columnspan=4)

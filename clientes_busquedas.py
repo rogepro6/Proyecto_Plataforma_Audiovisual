@@ -15,7 +15,7 @@ def mostrar_resultados(resultados, audiovisual):
         mensaje["text"] = ""
         try:
             titulo = tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Seleccione un registro"
             return
@@ -56,7 +56,7 @@ def mostrar_resultados(resultados, audiovisual):
         mensaje["text"] = ""
         try:
             titulo = tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Selecciona un registro"
             return

@@ -9,18 +9,23 @@ def add_pelicula():
         if len(tituloEntry.get()) and len(categoriaEntry.get()) and len(imagenEntry.get()) and \
                 len(duracionEntry.get()) and len(anioEntry.get()) and len(directorEntry.get()):
 
-            pelicula = Pelicula(
-                tituloEntry.get(),
-                categoriaEntry.get(),
-                imagenEntry.get(),
-                duracionEntry.get(),
-                anioEntry.get(),
-                directorEntry.get()
-            )
-            db.session.add(pelicula)
-            db.session.commit()
-            mensaje["fg"] = "blue"
-            mensaje["text"] = f"Pelicula {tituloEntry.get()} añadida con exito"
+            try:
+                pelicula = Pelicula(
+                    str(tituloEntry.get()),
+                    str(categoriaEntry.get()),
+                    str(imagenEntry.get()),
+                    float(duracionEntry.get()),
+                    int(anioEntry.get()),
+                    str(directorEntry.get())
+                )
+            except:
+                mensaje["fg"] = "red"
+                mensaje["text"] = "Los datos introducidos no son válidos"
+            else:
+                db.session.add(pelicula)
+                db.session.commit()
+                mensaje["fg"] = "blue"
+                mensaje["text"] = f"Pelicula {tituloEntry.get()} añadida con exito"
         else:
             mensaje["fg"] = "red"
             mensaje["text"] = "Debe introducir todos los datos"
@@ -71,7 +76,7 @@ def editar_Peli():
         mensaje["text"] = ""
         try:
             tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Seleccione una pelicula"
             return
@@ -106,7 +111,7 @@ def editar_Peli():
 
         try:
             tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Selecciona una pelicula"
             return
@@ -201,21 +206,26 @@ def editar_Peli():
             anio = input_anio_nuevo.get() if input_anio_nuevo.get() != "" else old_anio
             director = input_director_nuevo.get() if input_director_nuevo.get() != "" else old_director
 
-            db.session.query(Pelicula).filter(Pelicula.id == tabla.item(tabla.selection())["text"]).update(
-                {
-                    Pelicula.titulo: titulo,
-                    Pelicula.categoria: categoria,
-                    Pelicula.imagen: imagen,
-                    Pelicula.duracion: duracion,
-                    Pelicula.anio: anio,
-                    Pelicula.director: director
-                }
-            )
-            db.session.commit()
-            ventana_editar.destroy()
-            get_peliculas()
-            mensaje["fg"] = "blue"
-            mensaje["text"] = f"Pelicula {old_titulo} actualizada"
+            try:
+                db.session.query(Pelicula).filter(Pelicula.id == tabla.item(tabla.selection())["text"]).update(
+                    {
+                        Pelicula.titulo: str(titulo),
+                        Pelicula.categoria: str(categoria),
+                        Pelicula.imagen: str(imagen),
+                        Pelicula.duracion: float(duracion),
+                        Pelicula.anio: int(anio),
+                        Pelicula.director: str(director)
+                    }
+                )
+            except:
+                mensaje["fg"] = "red"
+                mensaje["text"] = "Los datos introducidos no son correctos"
+            else:
+                db.session.commit()
+                ventana_editar.destroy()
+                get_peliculas()
+                mensaje["fg"] = "blue"
+                mensaje["text"] = f"Pelicula {old_titulo} actualizada"
 
         s = ttk.Style()
         s.configure("my.TButton")
@@ -264,18 +274,28 @@ def editar_Peli():
 
 def add_serie():
     def registrar_serie():
-        serie = Serie(
-            tituloEntry.get(),
-            categoriaEntry.get(),
-            imagenEntry.get(),
-            temporadasEntry.get(),
-            capitulosEntry.get(),
-            duracion_capitulos_serieEntry.get()
-        )
-        db.session.add(serie)
-        db.session.commit()
-        mensaje["fg"] = "blue"
-        mensaje["text"] = f"Serie {tituloEntry.get()} añadida con exito"
+        if len(tituloEntry.get()) and len(categoriaEntry.get()) and len(imagenEntry.get()) and \
+                len(temporadasEntry.get()) and len(capitulosEntry.get()) and len(duracion_capitulos_serieEntry.get()):
+            try:
+                serie = Serie(
+                    str(tituloEntry.get()),
+                    str(categoriaEntry.get()),
+                    str(imagenEntry.get()),
+                    int(temporadasEntry.get()),
+                    int(capitulosEntry.get()),
+                    float(duracion_capitulos_serieEntry.get())
+                )
+            except:
+                mensaje["fg"] = "red"
+                mensaje["text"] = "Los datos introducidos no son válidos"
+            else:
+                db.session.add(serie)
+                db.session.commit()
+                mensaje["fg"] = "blue"
+                mensaje["text"] = f"Serie {tituloEntry.get()} añadida con exito"
+        else:
+            mensaje["fg"] = "red"
+            mensaje["text"] = "Debe introducir todos los datos"
 
     ventana_admin = Toplevel()  # Crear una ventana por delante de la principal
     ventana_admin.title("Registro de series")  # Titulo de la ventana
@@ -323,7 +343,7 @@ def editar_Serie():
         mensaje["text"] = ""
         try:
             tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Seleccione una serie"
             return
@@ -358,7 +378,7 @@ def editar_Serie():
 
         try:
             tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Selecciona una serie"
             return
@@ -415,7 +435,7 @@ def editar_Serie():
         etiqueta_temporadas_antiguo = Label(frame_ep, text="Temporadas antiguo")
         etiqueta_temporadas_antiguo.grid(row=8, column=0)
         input_temporadas_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_temporadas),
-                                       state="readonly")
+                                         state="readonly")
         input_temporadas_antiguo.grid(row=8, column=1)
         etiqueta_temporadas_nuevo = Label(frame_ep, text="Temporadas nuevo:")
         etiqueta_temporadas_nuevo.grid(row=9, column=0)
@@ -424,7 +444,8 @@ def editar_Serie():
 
         etiqueta_capitulos_antiguo = Label(frame_ep, text="Capitulos antiguo")
         etiqueta_capitulos_antiguo.grid(row=10, column=0)
-        input_capitulos_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_capitulos), state="readonly")
+        input_capitulos_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_capitulos),
+                                        state="readonly")
         input_capitulos_antiguo.grid(row=10, column=1)
         etiqueta_capitulos_nuevo = Label(frame_ep, text="Capitulos nuevo:")
         etiqueta_capitulos_nuevo.grid(row=11, column=0)
@@ -433,8 +454,9 @@ def editar_Serie():
 
         etiqueta_duracioncapitulos_antiguo = Label(frame_ep, text="Duracion de capitulos antiguo")
         etiqueta_duracioncapitulos_antiguo.grid(row=12, column=0)
-        input_duracioncapitulos_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_duracion_capitulo),
-                                       state="readonly")
+        input_duracioncapitulos_antiguo = Entry(frame_ep,
+                                                textvariable=StringVar(ventana_editar, value=old_duracion_capitulo),
+                                                state="readonly")
         input_duracioncapitulos_antiguo.grid(row=12, column=1)
         etiqueta_duracioncapitulos_nuevo = Label(frame_ep, text="Duracion de capitulos nuevo:")
         etiqueta_duracioncapitulos_nuevo.grid(row=13, column=0)
@@ -449,24 +471,29 @@ def editar_Serie():
             categoria = input_categoria_nuevo.get() if input_categoria_nuevo.get() != "" else old_categoria
             imagen = input_imagen_nuevo.get() if input_imagen_nuevo.get() != "" else old_imagen
             temporadas = input_temporadas_nuevo.get() if input_temporadas_nuevo.get() != "" else old_temporadas
-            capitulos = input_temporadas_nuevo.get() if input_temporadas_nuevo.get() != "" else old_temporadas
+            capitulos = input_capitulos_nuevo.get() if input_capitulos_nuevo.get() != "" else old_capitulos
             duracion_capitulos = input_duracioncapitulos_nuevo.get() if input_duracioncapitulos_nuevo.get() != "" else old_duracion_capitulo
 
-            db.session.query(Serie).filter(Serie.id == tabla.item(tabla.selection())["text"]).update(
-                {
-                    Serie.titulo: titulo,
-                    Serie.categoria: categoria,
-                    Serie.imagen: imagen,
-                    Serie.temporadas: temporadas,
-                    Serie.capitulos: capitulos,
-                    Serie.duracion_capitulo: duracion_capitulos
-                }
-            )
-            db.session.commit()
-            ventana_editar.destroy()
-            get_series()
-            mensaje["fg"] = "blue"
-            mensaje["text"] = f"Pelicula {old_titulo} actualizada"
+            try:
+                db.session.query(Serie).filter(Serie.id == tabla.item(tabla.selection())["text"]).update(
+                    {
+                        Serie.titulo: str(titulo),
+                        Serie.categoria: str(categoria),
+                        Serie.imagen: str(imagen),
+                        Serie.temporadas: int(temporadas),
+                        Serie.capitulos: int(capitulos),
+                        Serie.duracion_capitulo: float(duracion_capitulos)
+                    }
+                )
+            except:
+                mensaje["fg"] = "red"
+                mensaje["text"] = "Los datos introducidos no son correctos"
+            else:
+                db.session.commit()
+                ventana_editar.destroy()
+                get_series()
+                mensaje["fg"] = "blue"
+                mensaje["text"] = f"Serie {old_titulo} actualizada"
 
         s = ttk.Style()
         s.configure("my.TButton")
@@ -482,14 +509,14 @@ def editar_Serie():
 
     style = ttk.Style()
     style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
-                        font=('Calibri', 10))  # Se modifica la fuente de la tabla
+                    font=('Calibri', 10))  # Se modifica la fuente de la tabla
     style.configure("mystyle.Treeview.Heading",
-                        font=('Calibri', 10, 'bold'))  # Se modifica la fuente de las cabeceras
+                    font=('Calibri', 10, 'bold'))  # Se modifica la fuente de las cabeceras
     style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])
 
     # Estructura de la tabla de Peliculas
     tabla = ttk.Treeview(ventana_admin, height=10, columns=["#0", "#1", "#2", "#3", "#4", "#5", "#6"],
-                             style="mystyle.Treeview")
+                         style="mystyle.Treeview")
     tabla.grid(row=0, column=0)
     tabla.heading(column="#0", text="ID", anchor=CENTER)
     tabla.heading(column="#1", text="Titulo", anchor=CENTER)

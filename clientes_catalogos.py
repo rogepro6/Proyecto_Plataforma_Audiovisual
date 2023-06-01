@@ -2,6 +2,9 @@ from functools import partial
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox as mb
+
+from PIL.GimpGradientFile import linear
+
 from models.audiovisual import Pelicula, Serie
 from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 import matplotlib.pyplot as plt
@@ -125,12 +128,12 @@ def catalogo_completo(audiovisual):
         mostrar_catalogos(series, "Serie")
 
 
-def catalogo_vistas(audiovisual):
+def listas_usuarios(audiovisual, tipo):
     if audiovisual == "Pelicula":
         peliculas = []
         try:
-            titulos_vistos = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]
-            for i in titulos_vistos:
+            titulos = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + tipo]
+            for i in titulos:
                 peliculas.append(db.session.query(Pelicula).filter(Pelicula.titulo == i).first())
             mostrar_catalogos(peliculas, "Pelicula", "Vistas")
         except KeyError:
@@ -138,71 +141,91 @@ def catalogo_vistas(audiovisual):
     elif audiovisual == "Serie":
         series = []
         try:
-            titulos_vistos = dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]
-            for i in titulos_vistos:
+            titulos = dict_series_audiovisual[str(main.nombreUsuario.get()) + tipo]
+            for i in titulos:
                 series.append(db.session.query(Serie).filter(Serie.titulo == i).first())
             mostrar_catalogos(series, "Serie", "Vistas")
         except KeyError:
             mb.showwarning("Error", "No tiene ninunga serie en esta seccion")
 
 
-def catalogo_favoritas(audiovisual):
-    if audiovisual == "Pelicula":
-        peliculas = []
-        try:
-            titulos_favoritos = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"]
-            for i in titulos_favoritos:
-                peliculas.append(db.session.query(Pelicula).filter(Pelicula.titulo == i).first())
-            mostrar_catalogos(peliculas, "Pelicula", "Favoritas")
-        except KeyError:
-            mb.showwarning("Error", "No tiene ninunga pelicula en esta seccion")
-    elif audiovisual == "Serie":
-        series = []
-        try:
-            titulos_favoritos = dict_series_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"]
-            for i in titulos_favoritos:
-                series.append(db.session.query(Serie).filter(Serie.titulo == i).first())
-            mostrar_catalogos(series, "Serie", "Favoritas")
-        except KeyError:
-            mb.showwarning("Error", "No tiene ninunga serie en esta seccion")
+def config_grafica(grafica, ventana):
+    canvas = FigureCanvasTkAgg(grafica, ventana)  # CREAR AREA DE DIBUJO DE TKINTER.
+    canvas.draw()
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+    toolbar = NavigationToolbar2Tk(canvas, ventana)  # barra de iconos
+    toolbar.update()
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+    boton_salir = ttk.Button(ventana, text="Cerrar", command=lambda: ventana.destroy())
+    boton_salir.pack(side=BOTTOM)
 
 
-def graficas():
+def grafica_vision():
     try:
         pelis_vistas = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
-        duracion_peliculas_vistas = 0
+        series_vistas = dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
+    except KeyError:
+        mb.showwarning("Error", "No existen estadísticas para mostrar")
+    else:
+        numero_pelis = len(pelis_vistas)
+        numero_series = len(series_vistas)
 
         ventana_grafica = Toplevel()  # Crear una ventana por delante de la principal
-        ventana_grafica.title(f"Grafica de {main.nombreUsuario.get()}")  # Titulo de la ventana
+        ventana_grafica.title(f"Grafica de visiones de {main.nombreUsuario.get()}")  # Titulo de la ventana
         ventana_grafica.resizable(True, True)
 
-        # calcular las metricas
-        for peli in pelis_vistas:
-            pelicula = db.session.query(Pelicula).filter(Pelicula.titulo == peli).first()
-            duracion_peliculas_vistas += pelicula.duracion
-            print(duracion_peliculas_vistas)
-
-        duracion_peliculas_vistas /= 60  # Conversion a horas para la gráfica
+        if numero_series > numero_pelis:
+            rango = numero_series
+        else:
+            rango = numero_pelis
 
         # configuracion de la gráfica
         fig, ax = plt.subplots()
-        ax.barh(["Series", "Peliculas"], [1, duracion_peliculas_vistas], color="indianred")
+        ax.bar(["Series", "Peliculas"], [numero_series, numero_pelis], color="indianred")
+        ax.set_title('Cantidades vistas', loc="left",
+                     fontdict={'fontsize': 14, 'fontweight': 'bold', 'color': 'tab:blue'})
+        ax.set_ylabel("Numero de vistas", fontdict={'fontsize': 14, 'fontweight': 'bold', 'color': 'tab:blue'})
+        ax.set_yticks(range(0, rango + 1))
+
+        config_grafica(fig, ventana_grafica)
+
+
+def grafica_tiempo():
+    try:
+        pelis_vistas = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
+        series_vistas = dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
+    except KeyError:
+        mb.showwarning("Error", "No existen estadísticas para mostrar")
+    else:
+        duracion_peliculas_vistas = 0
+        duracion_series_vistas = 0
+
+        ventana_grafica = Toplevel()  # Crear una ventana por delante de la principal
+        ventana_grafica.title(f"Grafica de tiempo de {main.nombreUsuario.get()}")  # Titulo de la ventana
+        ventana_grafica.resizable(True, True)
+
+        # calcular las metricas
+        for i in pelis_vistas:
+            pelicula = db.session.query(Pelicula).filter(Pelicula.titulo == i).first()
+            duracion_peliculas_vistas += pelicula.duracion
+
+        for i in series_vistas:
+            serie = db.session.query(Serie).filter(Serie.titulo == i).first()
+            duracion_series_vistas += (serie.duracion_capitulo * serie.capitulos * serie.temporadas)
+
+        duracion_peliculas_vistas /= 60  # Conversion a horas para la gráfica
+        duracion_series_vistas /= 60  # Conversion a horas para la gráfica
+
+        # configuracion de la gráfica
+        fig, ax = plt.subplots()
+        ax.barh(["Series", "Peliculas"], [duracion_series_vistas, duracion_peliculas_vistas], color="indianred")
         ax.set_title('Tiempo de visionado', loc="left",
                      fontdict={'fontsize': 14, 'fontweight': 'bold', 'color': 'tab:blue'})
         ax.set_xlabel("Horas", fontdict={'fontsize': 14, 'fontweight': 'bold', 'color': 'tab:blue'})
 
-        canvas = FigureCanvasTkAgg(fig, ventana_grafica)  # CREAR AREA DE DIBUJO DE TKINTER.
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
-
-        toolbar = NavigationToolbar2Tk(canvas, ventana_grafica)  # barra de iconos
-        toolbar.update()
-        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
-
-        boton_salir = ttk.Button(ventana_grafica, text="Cerrar", command=lambda: ventana_grafica.destroy())
-        boton_salir.pack(side=BOTTOM)
-    except KeyError:
-        mb.showwarning("Error", "No existen estadísticas para mostrar")
+        config_grafica(fig, ventana_grafica)
 
 
 def catalogos(audiovisual):
@@ -216,19 +239,19 @@ def catalogos(audiovisual):
         titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
 
         boton_catalogo_completo = ttk.Button(ventana_catalogo_peliculas, text="Catalogo completo",
-                                         command=partial(catalogo_completo, "Pelicula"))
+                                             command=partial(catalogo_completo, "Pelicula"))
         boton_catalogo_completo.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_favoritos = ttk.Button(ventana_catalogo_peliculas, text="Catalogo Favoritas",
-                                          command=partial(catalogo_favoritas, "Pelicula"))
+                                              command=partial(listas_usuarios, "Pelicula", "_favoritos"))
         boton_catalogo_favoritos.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_vistas = ttk.Button(ventana_catalogo_peliculas, text="Catalogo Vistas",
-                                       command=partial(catalogo_vistas, "Pelicula"))
+                                           command=partial(listas_usuarios, "Pelicula", "_vistas"))
         boton_catalogo_vistas.grid(column=2, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_salir = ttk.Button(ventana_catalogo_peliculas, text="Salir",
-                             command=lambda: ventana_catalogo_peliculas.destroy())
+                                 command=lambda: ventana_catalogo_peliculas.destroy())
         boton_salir.grid(row=2, column=0, columnspan=4, sticky=W + E)
 
     elif audiovisual == "serie":
@@ -245,11 +268,11 @@ def catalogos(audiovisual):
         boton_catalogo_completo.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_favoritos = ttk.Button(ventana_catalogo_series, text="Catalogo Favoritas",
-                                              command=partial(catalogo_favoritas, "Serie"))
+                                              command=partial(listas_usuarios, "Serie", "_favoritos"))
         boton_catalogo_favoritos.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_vistas = ttk.Button(ventana_catalogo_series, text="Catalogo Vistas",
-                                           command=partial(catalogo_vistas, "Serie"))
+                                           command=partial(listas_usuarios, "Serie", "_vistas"))
         boton_catalogo_vistas.grid(column=2, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_salir = ttk.Button(ventana_catalogo_series, text="Salir",
