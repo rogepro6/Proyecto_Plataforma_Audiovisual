@@ -9,7 +9,7 @@ from models.audiovisual import Pelicula, Serie
 from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-import main
+
 import db
 
 
@@ -175,7 +175,7 @@ def grafica_vision(nombre):
         numero_series = len(series_vistas)
 
         ventana_grafica = Toplevel()  # Crear una ventana por delante de la principal
-        ventana_grafica.title(f"Grafica de visiones de {main.nombreUsuario.get()}")  # Titulo de la ventana
+        ventana_grafica.title(f"Grafica de visiones de {nombre}")  # Titulo de la ventana
         ventana_grafica.resizable(True, True)
 
         if numero_series >= numero_pelis:
@@ -206,7 +206,7 @@ def grafica_tiempo(nombre):
         duracion_series_vistas = 0
 
         ventana_grafica = Toplevel()  # Crear una ventana por delante de la principal
-        ventana_grafica.title(f"Grafica de tiempo de {main.nombreUsuario.get()}")  # Titulo de la ventana
+        ventana_grafica.title(f"Grafica de tiempo de {nombre}")  # Titulo de la ventana
         ventana_grafica.resizable(True, True)
 
         # calcular las metricas
@@ -235,7 +235,7 @@ def catalogos(audiovisual, nombre):
     if audiovisual == "pelicula":
 
         ventana_catalogo_peliculas = Toplevel()  # Crear una ventana por delante de la principal
-        ventana_catalogo_peliculas.title(f"Catalogo de peliculas de {main.nombreUsuario.get()}")  # Titulo de la ventana
+        ventana_catalogo_peliculas.title(f"Catalogo de peliculas de {nombre}")  # Titulo de la ventana
         ventana_catalogo_peliculas.resizable(True, True)
 
         titulo = Label(ventana_catalogo_peliculas, text=f"Usuario {nombre}", font=("Arial", 36))
@@ -260,10 +260,10 @@ def catalogos(audiovisual, nombre):
     elif audiovisual == "serie":
 
         ventana_catalogo_series = Toplevel()  # Crear una ventana por delante de la principal
-        ventana_catalogo_series.title(f"Catalogo de series de {main.nombreUsuario.get()}")  # Titulo de la ventana
+        ventana_catalogo_series.title(f"Catalogo de series de {nombre}")  # Titulo de la ventana
         ventana_catalogo_series.resizable(True, True)
 
-        titulo = Label(ventana_catalogo_series, text=f"Usuario {main.nombreUsuario.get()}", font=("Arial", 36))
+        titulo = Label(ventana_catalogo_series, text=f"Usuario {nombre}", font=("Arial", 36))
         titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
 
         boton_catalogo_completo = ttk.Button(ventana_catalogo_series, text="Catalogo completo",

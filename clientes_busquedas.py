@@ -4,8 +4,6 @@ from tkinter import ttk
 from models.audiovisual import Pelicula, Serie
 import db
 
-import main
-
 dict_peliculas_audiovisual = {}
 dict_series_audiovisual = {}
 
