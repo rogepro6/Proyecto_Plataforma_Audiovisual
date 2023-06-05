@@ -5,6 +5,13 @@ from models.audiovisual import Pelicula, Serie
 
 
 def add_pelicula():
+    titulo_pelicula = StringVar()
+    categoria_pelicula = StringVar()
+    imagen_pelicula = StringVar()
+    duracion_pelicula = StringVar()
+    anio_pelicula = StringVar()
+    director_pelicula = StringVar()
+
     def registrar_peli():
         if len(tituloEntry.get()) and len(categoriaEntry.get()) and len(imagenEntry.get()) and \
                 len(duracionEntry.get()) and len(anioEntry.get()) and len(directorEntry.get()):
@@ -26,6 +33,12 @@ def add_pelicula():
                 db.session.commit()
                 mensaje["fg"] = "blue"
                 mensaje["text"] = f"Pelicula {tituloEntry.get()} añadida con exito"
+                titulo_pelicula.set("")
+                categoria_pelicula.set("")
+                imagen_pelicula.set("")
+                duracion_pelicula.set("")
+                anio_pelicula.set("")
+                director_pelicula.set("")
         else:
             mensaje["fg"] = "red"
             mensaje["text"] = "Debe introducir todos los datos"
@@ -47,17 +60,17 @@ def add_pelicula():
     directorPeli = Label(ventana_admin, text="Director")
     directorPeli.grid(column=0, row=6)
 
-    tituloEntry = Entry(ventana_admin, textvariable=StringVar())
+    tituloEntry = Entry(ventana_admin, textvariable=titulo_pelicula)
     tituloEntry.grid(column=1, row=1)
-    categoriaEntry = Entry(ventana_admin, textvariable=StringVar())
+    categoriaEntry = Entry(ventana_admin, textvariable=categoria_pelicula)
     categoriaEntry.grid(column=1, row=2)
-    imagenEntry = Entry(ventana_admin, textvariable=StringVar())
+    imagenEntry = Entry(ventana_admin, textvariable=imagen_pelicula)
     imagenEntry.grid(column=1, row=3)
-    duracionEntry = Entry(ventana_admin, textvariable=StringVar())
+    duracionEntry = Entry(ventana_admin, textvariable=duracion_pelicula)
     duracionEntry.grid(column=1, row=4)
-    anioEntry = Entry(ventana_admin, textvariable=StringVar())
+    anioEntry = Entry(ventana_admin, textvariable=anio_pelicula)
     anioEntry.grid(column=1, row=5)
-    directorEntry = Entry(ventana_admin, textvariable=StringVar())
+    directorEntry = Entry(ventana_admin, textvariable=director_pelicula)
     directorEntry.grid(column=1, row=6)
 
     boton_registrar = ttk.Button(ventana_admin, text="Registrar", command=registrar_peli)
@@ -273,6 +286,13 @@ def editar_Peli():
 # -----------------------------------Series------------------------------------------------(Lo mismo que con las pelis)
 
 def add_serie():
+    titulo_serie = StringVar()
+    categoria_serie = StringVar()
+    imagen_serie = StringVar()
+    temporadas_serie = StringVar()
+    capitulos_serie = StringVar()
+    duracionCapitulos_serie = StringVar()
+
     def registrar_serie():
         if len(tituloEntry.get()) and len(categoriaEntry.get()) and len(imagenEntry.get()) and \
                 len(temporadasEntry.get()) and len(capitulosEntry.get()) and len(duracion_capitulos_serieEntry.get()):
@@ -293,6 +313,12 @@ def add_serie():
                 db.session.commit()
                 mensaje["fg"] = "blue"
                 mensaje["text"] = f"Serie {tituloEntry.get()} añadida con exito"
+                titulo_serie.set("")
+                categoria_serie.set("")
+                imagen_serie.set("")
+                temporadas_serie.set("")
+                capitulos_serie.set("")
+                duracionCapitulos_serie.set("")
         else:
             mensaje["fg"] = "red"
             mensaje["text"] = "Debe introducir todos los datos"
@@ -314,17 +340,17 @@ def add_serie():
     duracion_capitulos_serie = Label(ventana_admin, text="Duracion Capitulos")
     duracion_capitulos_serie.grid(column=0, row=6)
 
-    tituloEntry = Entry(ventana_admin, textvariable=StringVar())
+    tituloEntry = Entry(ventana_admin, textvariable=titulo_serie)
     tituloEntry.grid(column=1, row=1)
-    categoriaEntry = Entry(ventana_admin, textvariable=StringVar())
+    categoriaEntry = Entry(ventana_admin, textvariable=categoria_serie)
     categoriaEntry.grid(column=1, row=2)
-    imagenEntry = Entry(ventana_admin, textvariable=StringVar())
+    imagenEntry = Entry(ventana_admin, textvariable=imagen_serie)
     imagenEntry.grid(column=1, row=3)
-    temporadasEntry = Entry(ventana_admin, textvariable=StringVar())
+    temporadasEntry = Entry(ventana_admin, textvariable=temporadas_serie)
     temporadasEntry.grid(column=1, row=4)
-    capitulosEntry = Entry(ventana_admin, textvariable=StringVar())
+    capitulosEntry = Entry(ventana_admin, textvariable=capitulos_serie)
     capitulosEntry.grid(column=1, row=5)
-    duracion_capitulos_serieEntry = Entry(ventana_admin, textvariable=StringVar())
+    duracion_capitulos_serieEntry = Entry(ventana_admin, textvariable=duracionCapitulos_serie)
     duracion_capitulos_serieEntry.grid(column=1, row=6)
 
     boton_registrar = ttk.Button(ventana_admin, text="Registrar", command=registrar_serie)

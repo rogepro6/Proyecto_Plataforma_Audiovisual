@@ -1,7 +1,12 @@
 from tkinter import *
 from tkinter import ttk
+from math import ceil
 import db
 from models.usuarios import Usuario
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
+from clientes_catalogos import config_grafica
 
 
 def add_usuario():
@@ -45,7 +50,6 @@ def add_usuario():
 
 
 def gestion_usuarios():
-
     def get_usuarios():
         registros = tabla.get_children()
 
@@ -100,7 +104,8 @@ def gestion_usuarios():
 
         etiqueta_nombre_antiguo = Label(frame_ep, text="Nombre antiguo")
         etiqueta_nombre_antiguo.grid(row=2, column=0)
-        input_nombre_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_nombre), state="readonly")
+        input_nombre_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_nombre),
+                                     state="readonly")
         input_nombre_antiguo.grid(row=2, column=1)
         etiqueta_nombre_nuevo = Label(frame_ep, text="Nombre nuevo:")
         etiqueta_nombre_nuevo.grid(row=3, column=0)
@@ -177,3 +182,24 @@ def gestion_usuarios():
     boton_salir.grid(column=0, row=6, sticky=W + E)
 
     get_usuarios()
+
+
+def graficas_usuarios():
+    # revision de esta funcion
+    # Creacion de la ventana para graficas
+    ventana_graficas = Toplevel()
+    ventana_graficas.title("Graficas de Usuarios")  # Titulo de la ventana
+    ventana_graficas.resizable(False, False)
+
+    # calcular las leyendas
+    leyendas = []
+    cantidad_vistas = []
+    for i, x in dict_peliculas_audiovisual.items():
+        leyendas.append(i[:-7])
+        cantidad_vistas.append(len(x))
+
+    fig, ax = plt.subplots()
+    ax.pie(cantidad_vistas)
+    ax.legend(leyendas, loc='upper right')
+
+    config_grafica(fig, ventana_graficas)

@@ -5,7 +5,7 @@ from functools import partial
 import db
 from models.usuarios import Usuario
 from administracion_audiovisual import add_pelicula, add_serie, editar_Serie, editar_Peli
-from administracion_usuarios import gestion_usuarios
+from administracion_usuarios import gestion_usuarios, graficas_usuarios
 from clientes_busquedas import buscar_audiovisual
 from clientes_catalogos import catalogos, grafica_tiempo, grafica_vision
 
@@ -60,9 +60,13 @@ def iniciarSesion():
     admin = db.session.query(Usuario).filter_by(nombre="a", contra="a").first()
     if user == admin:
         mb.showinfo("Conectado", "Sesion conectada en modo Administracion")
+        nombreUsuario.set("")
+        contraUsuario.set("")
         administracion()
     elif user:
-        mb.showinfo("Conectado", f"Sesion iniciada con exito en {nombre}")
+        mb.showinfo("Conectado", f"Sesion iniciada con exito como {nombre}")
+        nombreUsuario.set("")
+        contraUsuario.set("")
         clientes(nombre)
     else:
         mb.showerror("Error", "Credenciales incorrectas, intentelo de nuevo")
@@ -83,6 +87,11 @@ def registrarUsuario():
         mb.showinfo("Registro con exito", f"Se ha registrado el usuario {nombre} con EXITO")
         nombreUsuario.set("")
         contraUsuario.set("")
+
+
+def salir_y_restaurar(ventana):
+    ventana.destroy()
+    root.deiconify()
 
 
 def administracion():
@@ -114,8 +123,11 @@ def administracion():
     controlUsuarios = ttk.Button(ventana_admin, text="Gestion Usuarios", command=gestion_usuarios)
     controlUsuarios.grid(column=0, row=4, ipadx=5, ipady=5, padx=5, pady=5, columnspan=4, sticky=W + E)
 
-    boton_salir = ttk.Button(ventana_admin, text="Salir", command=lambda: ventana_admin.destroy())
-    boton_salir.grid(column=0, row=5, sticky=E + W, columnspan=4)
+    graficasUsuarios = ttk.Button(ventana_admin, text="Graficas de Usuarios", command=graficas_usuarios)
+    graficasUsuarios.grid(column=0, row=5, ipadx=5, ipady=5, padx=5, pady=5, columnspan=4, sticky=W + E)
+
+    boton_salir = ttk.Button(ventana_admin, text="Salir", command=partial(salir_y_restaurar, ventana_admin))
+    boton_salir.grid(column=0, row=6, sticky=E + W, columnspan=4)
 
 
 def clientes(nombre):
@@ -128,23 +140,27 @@ def clientes(nombre):
     titulo = Label(ventana_usuarios, text=f"Usuario {nombre}", font=("Arial", 36))
     titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
 
-    button_buscar_peli = ttk.Button(ventana_usuarios, text="Buscar Peliculas", command=partial(buscar_audiovisual, "peliculas"))
+    button_buscar_peli = ttk.Button(ventana_usuarios, text="Buscar Peliculas",
+                                    command=partial(buscar_audiovisual, "peliculas", nombre))
     button_buscar_peli.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    button_buscarSerie = ttk.Button(ventana_usuarios, text="Buscar Series", command=partial(buscar_audiovisual, "series"))
+    button_buscarSerie = ttk.Button(ventana_usuarios, text="Buscar Series",
+                                    command=partial(buscar_audiovisual, "series", nombre))
     button_buscarSerie.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    button_catalogos_peliculas = ttk.Button(ventana_usuarios, text="Catalogo de peliculas", command=partial(catalogos, "pelicula"))
+    button_catalogos_peliculas = ttk.Button(ventana_usuarios, text="Catalogo de peliculas",
+                                            command=partial(catalogos, "pelicula", nombre))
     button_catalogos_peliculas.grid(column=0, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    button_catalogos_series = ttk.Button(ventana_usuarios, text="Catalogo de Series", command=partial(catalogos, "serie"))
+    button_catalogos_series = ttk.Button(ventana_usuarios, text="Catalogo de Series",
+                                         command=partial(catalogos, "serie", nombre))
     button_catalogos_series.grid(column=1, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    graficas_visionado = ttk.Button(ventana_usuarios, text="Graficas de visionado", command=grafica_vision)
+    graficas_visionado = ttk.Button(ventana_usuarios, text="Graficas de visionado", command=partial(grafica_vision, nombre))
     graficas_visionado.grid(column=0, row=3, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=4)
 
-    graficas_tiempo = ttk.Button(ventana_usuarios, text="Graficas de tiempo", command=grafica_tiempo)
+    graficas_tiempo = ttk.Button(ventana_usuarios, text="Graficas de tiempo", command=partial(grafica_tiempo, nombre))
     graficas_tiempo.grid(column=0, row=4, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=4)
 
-    boton_salir = ttk.Button(ventana_usuarios, text="Salir", command=lambda: ventana_usuarios.destroy())
+    boton_salir = ttk.Button(ventana_usuarios, text="Salir", command=partial(salir_y_restaurar, ventana_usuarios))
     boton_salir.grid(column=0, row=5, sticky=E + W, columnspan=4)

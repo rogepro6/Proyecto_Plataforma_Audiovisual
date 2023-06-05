@@ -1,15 +1,23 @@
 import db
 from models import audiovisual
+from math import ceil
 
-peli = audiovisual.Pelicula("El padrino", "mafia", "img.png", 170, 1976, "Francis Fran coppola")
-serie = audiovisual.Serie("Juego de Tronos", "Epica", "img2.png", 8, 10, 60)
+# Calcular el numero de  graficas a mostrar
+    users = db.session.query(Usuario).all()
+    filas = ceil(len(users) / 2)
+    print(dict_peliculas_audiovisual)
+    len(dict_peliculas_audiovisual)
 
-db.Base.metadata.drop_all(bind=db.engine, checkfirst=True)
-db.Base.metadata.create_all(db.engine)
+fig, ax = plt.subplots(filas, 2, sharey=True, sharex=True)
+    tiempo_empleado = [6, 6]
+    tipo_audiovisual = ["Series", "Peliculas"]
 
-db.session.add(peli)
-db.session.add(serie)
-db.session.commit()
-
+if filas >= 2:
+    for i in range(filas):
+        for j in range(2):
+            ax[i, j].barh(tipo_audiovisual, tiempo_empleado)
+    config_grafica(fig, ventana_graficas)
+else:
+    print("Pocos clientes para mostrar las graficas")
 
 

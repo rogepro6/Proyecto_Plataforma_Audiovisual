@@ -13,7 +13,7 @@ import main
 import db
 
 
-def mostrar_catalogos(resultados, audiovisual, tipo=None):
+def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
     ventana_mostrar = Toplevel()
     ventana_mostrar.title("Resultados busqueda")  # Titulo de la ventana
     ventana_mostrar.resizable(True, True)
@@ -34,9 +34,9 @@ def mostrar_catalogos(resultados, audiovisual, tipo=None):
     tabla.heading(column="#2", text="Categoria", anchor=CENTER)
     tabla.heading(column="#3", text="Imagen", anchor=CENTER)
 
-    def eliminar(diccionario, tipo):
+    def eliminar(diccionario, tipo, nombre):
         try:
-            diccionario[str(main.nombreUsuario.get()) + tipo].remove(
+            diccionario[str(nombre) + tipo].remove(
                 tabla.item(tabla.selection())["values"][0])
         except IndexError:
             mensaje["fg"] = "red"
@@ -71,14 +71,14 @@ def mostrar_catalogos(resultados, audiovisual, tipo=None):
         if tipo == "Vistas":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
-                                      command=lambda: eliminar(dict_peliculas_audiovisual, "_vistas"))
+                                      command=lambda: eliminar(dict_peliculas_audiovisual, "_vistas", nombre))
 
             boton_borrar.grid(row=2, column=0, columnspan=3, sticky=W + E)
 
         elif tipo == "Favoritas":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
-                                      command=lambda: eliminar(dict_peliculas_audiovisual, "_favoritos"))
+                                      command=lambda: eliminar(dict_peliculas_audiovisual, "_favoritos", nombre))
             boton_borrar.grid(row=2, column=0, columnspan=3, sticky=W + E)
 
     elif audiovisual == "Serie":
@@ -101,14 +101,14 @@ def mostrar_catalogos(resultados, audiovisual, tipo=None):
         if tipo == "Vistas":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
-                                      command=lambda: eliminar(dict_series_audiovisual, "_vistas"))
+                                      command=lambda: eliminar(dict_series_audiovisual, "_vistas", nombre))
 
             boton_borrar.grid(row=2, column=0, columnspan=3, sticky=W + E)
 
         elif tipo == "Favoritas":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
-                                      command=lambda: eliminar(dict_series_audiovisual, "_favoritos"))
+                                      command=lambda: eliminar(dict_series_audiovisual, "_favoritos", nombre))
             boton_borrar.grid(row=2, column=0, columnspan=3, sticky=W + E)
 
     mensaje = Label(ventana_mostrar, text="", fg="red")
@@ -119,32 +119,32 @@ def mostrar_catalogos(resultados, audiovisual, tipo=None):
     boton_salir.grid(row=3, column=0, columnspan=3, sticky=W + E)
 
 
-def catalogo_completo(audiovisual):
+def catalogo_completo(audiovisual, nombre):
     if audiovisual == "Pelicula":
         peliculas = db.session.query(Pelicula).all()
-        mostrar_catalogos(peliculas, "Pelicula")
+        mostrar_catalogos(peliculas, "Pelicula", nombre)
     elif audiovisual == "Serie":
         series = db.session.query(Serie).all()
-        mostrar_catalogos(series, "Serie")
+        mostrar_catalogos(series, "Serie", nombre)
 
 
-def listas_usuarios(audiovisual, tipo):
+def listas_usuarios(audiovisual, tipo, nombre):
     if audiovisual == "Pelicula":
         peliculas = []
         try:
-            titulos = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + tipo]
+            titulos = dict_peliculas_audiovisual[str(nombre) + tipo]
             for i in titulos:
                 peliculas.append(db.session.query(Pelicula).filter(Pelicula.titulo == i).first())
-            mostrar_catalogos(peliculas, "Pelicula", "Vistas")
+            mostrar_catalogos(peliculas, "Pelicula", nombre, tipo="Vistas")
         except KeyError:
             mb.showwarning("Error", "No tiene ninunga pelicula en esta seccion")
     elif audiovisual == "Serie":
         series = []
         try:
-            titulos = dict_series_audiovisual[str(main.nombreUsuario.get()) + tipo]
+            titulos = dict_series_audiovisual[str(nombre) + tipo]
             for i in titulos:
                 series.append(db.session.query(Serie).filter(Serie.titulo == i).first())
-            mostrar_catalogos(series, "Serie", "Vistas")
+            mostrar_catalogos(series, "Serie", nombre, tipo="Vistas")
         except KeyError:
             mb.showwarning("Error", "No tiene ninunga serie en esta seccion")
 
@@ -162,12 +162,14 @@ def config_grafica(grafica, ventana):
     boton_salir.pack(side=BOTTOM)
 
 
-def grafica_vision():
+def grafica_vision(nombre):
     try:
-        pelis_vistas = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
-        series_vistas = dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
+        print(nombre)
+        pelis_vistas = dict_peliculas_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
+        series_vistas = dict_series_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
     except KeyError:
-        mb.showwarning("Error", "No existen estadísticas para mostrar")
+        mb.showwarning("Error", "No existen estadísticas para mostrar. Debe haber visto al menos una de cada para "
+                                "mostrar sus graficas")
     else:
         numero_pelis = len(pelis_vistas)
         numero_series = len(series_vistas)
@@ -176,7 +178,7 @@ def grafica_vision():
         ventana_grafica.title(f"Grafica de visiones de {main.nombreUsuario.get()}")  # Titulo de la ventana
         ventana_grafica.resizable(True, True)
 
-        if numero_series > numero_pelis:
+        if numero_series >= numero_pelis:
             rango = numero_series
         else:
             rango = numero_pelis
@@ -192,12 +194,13 @@ def grafica_vision():
         config_grafica(fig, ventana_grafica)
 
 
-def grafica_tiempo():
+def grafica_tiempo(nombre):
     try:
-        pelis_vistas = dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
-        series_vistas = dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]  # linea propensa de error
+        pelis_vistas = dict_peliculas_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
+        series_vistas = dict_series_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
     except KeyError:
-        mb.showwarning("Error", "No existen estadísticas para mostrar")
+        mb.showwarning("Error", "No existen estadísticas para mostrar. Debe haber visto al menos una de cada para "
+                                "mostrar sus graficas")
     else:
         duracion_peliculas_vistas = 0
         duracion_series_vistas = 0
@@ -228,18 +231,18 @@ def grafica_tiempo():
         config_grafica(fig, ventana_grafica)
 
 
-def catalogos(audiovisual):
+def catalogos(audiovisual, nombre):
     if audiovisual == "pelicula":
 
         ventana_catalogo_peliculas = Toplevel()  # Crear una ventana por delante de la principal
         ventana_catalogo_peliculas.title(f"Catalogo de peliculas de {main.nombreUsuario.get()}")  # Titulo de la ventana
         ventana_catalogo_peliculas.resizable(True, True)
 
-        titulo = Label(ventana_catalogo_peliculas, text=f"Usuario {main.nombreUsuario.get()}", font=("Arial", 36))
+        titulo = Label(ventana_catalogo_peliculas, text=f"Usuario {nombre}", font=("Arial", 36))
         titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
 
         boton_catalogo_completo = ttk.Button(ventana_catalogo_peliculas, text="Catalogo completo",
-                                             command=partial(catalogo_completo, "Pelicula"))
+                                             command=partial(catalogo_completo, "Pelicula", nombre))
         boton_catalogo_completo.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_favoritos = ttk.Button(ventana_catalogo_peliculas, text="Catalogo Favoritas",
@@ -264,15 +267,15 @@ def catalogos(audiovisual):
         titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
 
         boton_catalogo_completo = ttk.Button(ventana_catalogo_series, text="Catalogo completo",
-                                             command=partial(catalogo_completo, "Serie"))
+                                             command=partial(catalogo_completo, "Serie", nombre))
         boton_catalogo_completo.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_favoritos = ttk.Button(ventana_catalogo_series, text="Catalogo Favoritas",
-                                              command=partial(listas_usuarios, "Serie", "_favoritos"))
+                                              command=partial(listas_usuarios, "Serie", "_favoritos", nombre))
         boton_catalogo_favoritos.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_vistas = ttk.Button(ventana_catalogo_series, text="Catalogo Vistas",
-                                           command=partial(listas_usuarios, "Serie", "_vistas"))
+                                           command=partial(listas_usuarios, "Serie", "_vistas", nombre))
         boton_catalogo_vistas.grid(column=2, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_salir = ttk.Button(ventana_catalogo_series, text="Salir",

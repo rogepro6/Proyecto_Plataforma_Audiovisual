@@ -10,8 +10,8 @@ dict_peliculas_audiovisual = {}
 dict_series_audiovisual = {}
 
 
-def mostrar_resultados(resultados, audiovisual):
-    def favoritos(tipo):
+def mostrar_resultados(resultados, audiovisual, nombre):
+    def favoritos(tipo, nombre_cliente):
         mensaje["text"] = ""
         try:
             titulo = tabla.item(tabla.selection())["values"][0]
@@ -22,37 +22,37 @@ def mostrar_resultados(resultados, audiovisual):
 
         if tipo == "peliculas":
             try:
-                if titulo in dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"]:
+                if titulo in dict_peliculas_audiovisual[str(nombre_cliente) + "_favoritos"]:
                     mensaje["fg"] = "red"
                     mensaje["text"] = "La pelicula ya esta en favoritos"
                     return
                 else:
-                    dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"].append(titulo)
+                    dict_peliculas_audiovisual[str(nombre_cliente) + "_favoritos"].append(titulo)
                     mensaje["fg"] = "blue"
                     mensaje["text"] = f"Pelicula {titulo} añadida a favoritos"
             except:
-                dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"] = []
-                dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"].append(titulo)
+                dict_peliculas_audiovisual[str(nombre_cliente) + "_favoritos"] = []
+                dict_peliculas_audiovisual[str(nombre_cliente) + "_favoritos"].append(titulo)
                 mensaje["fg"] = "blue"
                 mensaje["text"] = f"Pelicula {titulo} añadida a favoritos"
 
         elif tipo == "series":
             try:
-                if titulo in dict_series_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"]:
+                if titulo in dict_series_audiovisual[str(nombre_cliente) + "_favoritos"]:
                     mensaje["fg"] = "red"
                     mensaje["text"] = "La serie ya esta en favoritos"
                     return
                 else:
-                    dict_series_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"].append(titulo)
+                    dict_series_audiovisual[str(nombre_cliente) + "_favoritos"].append(titulo)
                     mensaje["fg"] = "blue"
                     mensaje["text"] = f"Serie {titulo} añadida a favoritos"
             except:
-                dict_series_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"] = []
-                dict_series_audiovisual[str(main.nombreUsuario.get()) + "_favoritos"].append(titulo)
+                dict_series_audiovisual[str(nombre_cliente) + "_favoritos"] = []
+                dict_series_audiovisual[str(nombre_cliente) + "_favoritos"].append(titulo)
                 mensaje["fg"] = "blue"
                 mensaje["text"] = f"Serie {titulo} añadida a favoritos"
 
-    def vistas(tipo):
+    def vistas(tipo, nombre_cliente):
         mensaje["text"] = ""
         try:
             titulo = tabla.item(tabla.selection())["values"][0]
@@ -62,32 +62,32 @@ def mostrar_resultados(resultados, audiovisual):
             return
         if tipo == "peliculas":
             try:
-                if titulo in dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]:
+                if titulo in dict_peliculas_audiovisual[str(nombre_cliente) + "_vistas"]:
                     mensaje["fg"] = "red"
                     mensaje["text"] = "La pelicula ya esta en vistas"
                     return
                 else:
-                    dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"].append(titulo)
+                    dict_peliculas_audiovisual[str(nombre_cliente) + "_vistas"].append(titulo)
                     mensaje["fg"] = "blue"
                     mensaje["text"] = f"Pelicula {titulo} añadida a vistas"
             except:
-                dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"] = []
-                dict_peliculas_audiovisual[str(main.nombreUsuario.get()) + "_vistas"].append(titulo)
+                dict_peliculas_audiovisual[str(nombre_cliente) + "_vistas"] = []
+                dict_peliculas_audiovisual[str(nombre_cliente) + "_vistas"].append(titulo)
                 mensaje["fg"] = "blue"
                 mensaje["text"] = f"Pelicula {titulo} añadida a vistas"
         if tipo == "series":
             try:
-                if titulo in dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"]:
+                if titulo in dict_series_audiovisual[str(nombre_cliente) + "_vistas"]:
                     mensaje["fg"] = "red"
                     mensaje["text"] = "La serie ya esta en vistas"
                     return
                 else:
-                    dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"].append(titulo)
+                    dict_series_audiovisual[str(nombre_cliente) + "_vistas"].append(titulo)
                     mensaje["fg"] = "blue"
                     mensaje["text"] = f"Serie {titulo} añadida a vistas"
             except:
-                dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"] = []
-                dict_series_audiovisual[str(main.nombreUsuario.get()) + "_vistas"].append(titulo)
+                dict_series_audiovisual[str(nombre_cliente) + "_vistas"] = []
+                dict_series_audiovisual[str(nombre_cliente) + "_vistas"].append(titulo)
                 mensaje["fg"] = "blue"
                 mensaje["text"] = f"Serie {titulo} añadida a vistas"
 
@@ -130,11 +130,11 @@ def mostrar_resultados(resultados, audiovisual):
                                                           pelicula.director))
 
         boton_favoritas = ttk.Button(ventana_resultados_busqueda, text="Añadir a favoritas",
-                                     command=partial(favoritos, "peliculas"))
+                                     command=partial(favoritos, "peliculas", nombre))
         boton_favoritas.grid(row=2, column=0, columnspan=2, sticky=W + E)
 
         boton_vistas = ttk.Button(ventana_resultados_busqueda, text="Pelicula vista",
-                                  command=partial(vistas, "peliculas"))
+                                  command=partial(vistas, "peliculas", nombre))
         boton_vistas.grid(row=3, column=0, columnspan=2, sticky=W + E)
 
         boton_salir = ttk.Button(ventana_resultados_busqueda, text="Salir",
@@ -168,11 +168,11 @@ def mostrar_resultados(resultados, audiovisual):
                                                        serie.duracion_capitulo))
 
         boton_favoritas = ttk.Button(ventana_resultados_busqueda, text="Añadir a favoritas",
-                                     command=partial(favoritos, "series"))
+                                     command=partial(favoritos, "series", nombre))
         boton_favoritas.grid(row=2, column=0, columnspan=2, sticky=W + E)
 
         boton_vistas = ttk.Button(ventana_resultados_busqueda, text="Serie vista",
-                                  command=partial(vistas, "series"))
+                                  command=partial(vistas, "series", nombre))
         boton_vistas.grid(row=3, column=0, columnspan=2, sticky=W + E)
 
         boton_salir = ttk.Button(ventana_resultados_busqueda, text="Salir",
@@ -183,8 +183,8 @@ def mostrar_resultados(resultados, audiovisual):
         mensaje.grid(row=1, column=0, columnspan=2, sticky=W + E)
 
 
-def buscar_audiovisual(audiovisual):
-    def busqueda(tipo):
+def buscar_audiovisual(audiovisual, nombre):
+    def busqueda(tipo, nombre_cliente):
         if busqueda_entry.get() == "":
             mensaje["fg"] = "red"
             mensaje["text"] = "Seleccione una busqueda"
@@ -192,17 +192,17 @@ def buscar_audiovisual(audiovisual):
             if tipo == "peliculas":
                 if modo_busqueda.get() == "titulo":
                     resultados = db.session.query(Pelicula).filter_by(titulo=busqueda_entry.get())
-                    mostrar_resultados(resultados, tipo)
+                    mostrar_resultados(resultados, tipo, nombre_cliente)
                 elif modo_busqueda.get() == "categoria":
                     resultados = db.session.query(Pelicula).filter_by(categoria=busqueda_entry.get())
-                    mostrar_resultados(resultados, tipo)
+                    mostrar_resultados(resultados, tipo, nombre_cliente)
             elif tipo == "series":
                 if modo_busqueda.get() == "titulo":
                     resultados = db.session.query(Serie).filter_by(titulo=busqueda_entry.get())
-                    mostrar_resultados(resultados, tipo)
+                    mostrar_resultados(resultados, tipo, nombre_cliente)
                 elif modo_busqueda.get() == "categoria":
                     resultados = db.session.query(Serie).filter_by(categoria=busqueda_entry.get())
-                    mostrar_resultados(resultados, tipo)
+                    mostrar_resultados(resultados, tipo, nombre_cliente)
 
     ventana_buscar = Toplevel()  # Crear una ventana por delante de la principal
     ventana_buscar.title(f"Buscador de {audiovisual}")  # Titulo de la ventana
@@ -217,7 +217,7 @@ def buscar_audiovisual(audiovisual):
     busqueda_entry = Entry(ventana_buscar)
     busqueda_entry.grid(row=1, column=0, padx=10, pady=10, columnspan=2, sticky=W + E)
 
-    boton_buscar = ttk.Button(ventana_buscar, text="Buscar", command=partial(busqueda, audiovisual))
+    boton_buscar = ttk.Button(ventana_buscar, text="Buscar", command=partial(busqueda, audiovisual, nombre))
     boton_buscar.grid(row=3, column=0, columnspan=2, sticky=W + E)
 
     boton_salir = ttk.Button(ventana_buscar, text="Salir", command=lambda: ventana_buscar.destroy())
