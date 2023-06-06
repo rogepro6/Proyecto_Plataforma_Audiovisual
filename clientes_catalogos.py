@@ -68,14 +68,14 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
                                                       item.duracion,
                                                       item.anio,
                                                       item.director))
-        if tipo == "Vistas":
+        if tipo == "_vistas":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
                                       command=lambda: eliminar(dict_peliculas_audiovisual, "_vistas", nombre))
 
             boton_borrar.grid(row=2, column=0, columnspan=3, sticky=W + E)
 
-        elif tipo == "Favoritas":
+        elif tipo == "_favoritos":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
                                       command=lambda: eliminar(dict_peliculas_audiovisual, "_favoritos", nombre))
@@ -98,14 +98,14 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
                                                       item.temporadas,
                                                       item.capitulos,
                                                       item.duracion_capitulo))
-        if tipo == "Vistas":
+        if tipo == "_vistas":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
                                       command=lambda: eliminar(dict_series_audiovisual, "_vistas", nombre))
 
             boton_borrar.grid(row=2, column=0, columnspan=3, sticky=W + E)
 
-        elif tipo == "Favoritas":
+        elif tipo == "_favoritos":
 
             boton_borrar = ttk.Button(ventana_mostrar, text="Eliminar del catalogo",
                                       command=lambda: eliminar(dict_series_audiovisual, "_favoritos", nombre))
@@ -135,7 +135,7 @@ def listas_usuarios(audiovisual, tipo, nombre):
             titulos = dict_peliculas_audiovisual[str(nombre) + tipo]
             for i in titulos:
                 peliculas.append(db.session.query(Pelicula).filter(Pelicula.titulo == i).first())
-            mostrar_catalogos(peliculas, "Pelicula", nombre, tipo="Vistas")
+            mostrar_catalogos(peliculas, "Pelicula", nombre, tipo=tipo)
         except KeyError:
             mb.showwarning("Error", "No tiene ninunga pelicula en esta seccion")
     elif audiovisual == "Serie":
@@ -144,7 +144,7 @@ def listas_usuarios(audiovisual, tipo, nombre):
             titulos = dict_series_audiovisual[str(nombre) + tipo]
             for i in titulos:
                 series.append(db.session.query(Serie).filter(Serie.titulo == i).first())
-            mostrar_catalogos(series, "Serie", nombre, tipo="Vistas")
+            mostrar_catalogos(series, "Serie", nombre, tipo=tipo)
         except KeyError:
             mb.showwarning("Error", "No tiene ninunga serie en esta seccion")
 
@@ -246,11 +246,11 @@ def catalogos(audiovisual, nombre):
         boton_catalogo_completo.grid(column=0, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_favoritos = ttk.Button(ventana_catalogo_peliculas, text="Catalogo Favoritas",
-                                              command=partial(listas_usuarios, "Pelicula", "_favoritos"))
+                                              command=partial(listas_usuarios, "Pelicula", "_favoritos", nombre))
         boton_catalogo_favoritos.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_catalogo_vistas = ttk.Button(ventana_catalogo_peliculas, text="Catalogo Vistas",
-                                           command=partial(listas_usuarios, "Pelicula", "_vistas"))
+                                           command=partial(listas_usuarios, "Pelicula", "_vistas", nombre))
         boton_catalogo_vistas.grid(column=2, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
         boton_salir = ttk.Button(ventana_catalogo_peliculas, text="Salir",

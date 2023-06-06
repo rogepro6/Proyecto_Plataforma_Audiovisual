@@ -1,0 +1,11 @@
+
+BG_VENTANA = "#F3F781"
+BG_ETIQUETA = "#CEF6F5"
+
+FG_BOTON = "#0404B4"
+AFG_BOTON = "#DF0174"
+ABG_BOTON = "#610B21"
+
+ENTRADAS_DE_TEXTO = ('Comic Sans MS', 15)
+TEXTOS = ('Comic Sans MS', 15, "bold")
+ENCABEZADOS = ("Calibri", 45, "bold")

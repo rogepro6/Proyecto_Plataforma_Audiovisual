@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox as mb
 from functools import partial
 import db
+from styles import styles
 from models.usuarios import Usuario
 from administracion_audiovisual import add_pelicula, add_serie, editar_Serie, editar_Peli
 from administracion_usuarios import gestion_usuarios, graficas_usuarios
@@ -16,38 +17,46 @@ contraUsuario = StringVar()
 
 def interfazUsuario():
     # Ventana Principal
-    root.title("Login Usuario")
+    root.title("Login Usuarios")
+    root.resizable(False, False)
 
     # Frame Principal
     mainFrame = Frame(root)
     mainFrame.pack()
-    mainFrame.config(width=400, height=320, bg="lightblue")
+    mainFrame.config(width=400, height=320, background=styles.BG_VENTANA)
 
     # Textos y titulos
-    titulo = Label(mainFrame, text="Login de Usuarios", font=("Arial", 36))
+    titulo = ttk.Label(mainFrame, text="PLATAFORMA AUDIOVISUAL", font=styles.ENCABEZADOS,
+                       background=styles.BG_ETIQUETA)
     titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=2)
 
-    nombreLabel = Label(mainFrame, text="Nombre ")
+    nombreLabel = ttk.Label(mainFrame, text="Nombre ", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
     nombreLabel.grid(column=0, row=1)
-    passLabel = Label(mainFrame, text="Contraseña ")
+
+    passLabel = ttk.Label(mainFrame, text="Contraseña ", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
     passLabel.grid(column=0, row=2)
 
     # Entradas de texto
 
     nombreUsuario.set("")
-    nombreEntry = Entry(mainFrame, textvariable=nombreUsuario)
+    nombreEntry = Entry(mainFrame, textvariable=nombreUsuario, font=styles.ENTRADAS_DE_TEXTO)
     nombreEntry.grid(column=1, row=1)
 
     contraUsuario.set("")
-    contraEntry = Entry(mainFrame, textvariable=contraUsuario, show="*")
+    contraEntry = Entry(mainFrame, textvariable=contraUsuario, font=styles.ENTRADAS_DE_TEXTO, show="*")
     contraEntry.grid(column=1, row=2)
 
     # Botones
 
-    iniciarSesionButton = ttk.Button(mainFrame, text="Iniciar Sesion", command=iniciarSesion)
+    iniciarSesionButton = Button(mainFrame, text="Iniciar Sesion", foreground=styles.FG_BOTON,
+                                 activeforeground=styles.AFG_BOTON,
+                                 activebackground=styles.ABG_BOTON, command=iniciarSesion)
     iniciarSesionButton.grid(column=1, row=3, ipadx=5, ipady=5, padx=10, pady=10)
 
-    registrarButton = ttk.Button(mainFrame, text="Registrar Usuario", command=registrarUsuario)
+    registrarButton = Button(mainFrame, text="Registrar Usuario", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON, command=registrarUsuario)
+
     registrarButton.grid(column=0, row=3, ipadx=5, ipady=5, padx=10, pady=10)
 
     root.mainloop()
@@ -80,6 +89,10 @@ def registrarUsuario():
         mb.showerror("Usuario existente", "Por favor escoja otro nombre")
         nombreUsuario.set("")
         contraUsuario.set("")
+    elif len(nombre) == 0 or len(password) == 0:
+        mb.showerror("Ausencia de datos", "Introduzca nombre y contraseña")
+        nombreUsuario.set("")
+        contraUsuario.set("")
     else:
         nuevoUsuario = Usuario(nombre, password)
         db.session.add(nuevoUsuario)
@@ -99,18 +112,21 @@ def administracion():
 
     ventana_admin = Toplevel()  # Crear una ventana por delante de la principal
     root.withdraw()
+    ventana_admin.config(width=400, height=320, background=styles.BG_VENTANA)
     ventana_admin.title("Modo administracion")  # Titulo de la ventana
     ventana_admin.resizable(False, False)  # Redimension de la ventana
 
-    titulo = Label(ventana_admin, text="ADMINISTRACION", font=("Arial", 36))
+    titulo = ttk.Label(ventana_admin, text="ADMINISTRACION", background=styles.BG_ETIQUETA, font=styles.ENCABEZADOS)
     titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
 
-    nombreLabel = Label(ventana_admin, text="PELICULAS")
+    nombreLabel = ttk.Label(ventana_admin, text="PELICULAS", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
     nombreLabel.grid(column=0, row=1)
-    passLabel = Label(ventana_admin, text="SERIES")
+    passLabel = ttk.Label(ventana_admin, text="SERIES", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
     passLabel.grid(column=0, row=2)
 
-    regPeli = ttk.Button(ventana_admin, text="Registrar", command=add_pelicula)
+    regPeli = Button(ventana_admin, text="Registrar", foreground=styles.FG_BOTON,
+                     activeforeground=styles.AFG_BOTON,
+                     activebackground=styles.ABG_BOTON, command=add_pelicula)
     regPeli.grid(column=1, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E)
     regSerie = ttk.Button(ventana_admin, text="Registrar", command=add_serie)
     regSerie.grid(column=1, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E)
@@ -156,7 +172,8 @@ def clientes(nombre):
                                          command=partial(catalogos, "serie", nombre))
     button_catalogos_series.grid(column=1, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=1)
 
-    graficas_visionado = ttk.Button(ventana_usuarios, text="Graficas de visionado", command=partial(grafica_vision, nombre))
+    graficas_visionado = ttk.Button(ventana_usuarios, text="Graficas de visionado",
+                                    command=partial(grafica_vision, nombre))
     graficas_visionado.grid(column=0, row=3, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E, columnspan=4)
 
     graficas_tiempo = ttk.Button(ventana_usuarios, text="Graficas de tiempo", command=partial(grafica_tiempo, nombre))

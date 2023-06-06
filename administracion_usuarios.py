@@ -1,10 +1,10 @@
 from tkinter import *
 from tkinter import ttk
-from math import ceil
+
 import db
 from models.usuarios import Usuario
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+
 from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 from clientes_catalogos import config_grafica
 
