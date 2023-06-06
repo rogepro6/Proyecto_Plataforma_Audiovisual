@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import db
+from styles import styles
 from models.audiovisual import Pelicula, Serie
 
 
@@ -44,42 +45,47 @@ def add_pelicula():
             mensaje["text"] = "Debe introducir todos los datos"
 
     ventana_admin = Toplevel()  # Crear una ventana por delante de la principal
+    ventana_admin.config(width=400, height=320, background=styles.BG_VENTANA)
     ventana_admin.title("Registro de peliculas")  # Titulo de la ventana
     ventana_admin.resizable(False, False)
 
-    tituloPeli = Label(ventana_admin, text="Titulo ")
-    tituloPeli.grid(column=0, row=1)
-    categoriaPeli = Label(ventana_admin, text="Categoria ")
-    categoriaPeli.grid(column=0, row=2)
-    imagenPeli = Label(ventana_admin, text="Imagen")
-    imagenPeli.grid(column=0, row=3)
-    duracionPeli = Label(ventana_admin, text="Duracion")
-    duracionPeli.grid(column=0, row=4)
-    anioPeli = Label(ventana_admin, text="Año")
-    anioPeli.grid(column=0, row=5)
-    directorPeli = Label(ventana_admin, text="Director")
-    directorPeli.grid(column=0, row=6)
+    tituloPeli = ttk.Label(ventana_admin, text="Titulo", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    tituloPeli.grid(column=0, row=1, ipadx=5, ipady=5, padx=10, pady=10)
+    categoriaPeli = ttk.Label(ventana_admin, text="Categoria", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    categoriaPeli.grid(column=0, row=2, ipadx=5, ipady=5, padx=10, pady=10)
+    imagenPeli = ttk.Label(ventana_admin, text="Imagen", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    imagenPeli.grid(column=0, row=3, ipadx=5, ipady=5, padx=10, pady=10)
+    duracionPeli = ttk.Label(ventana_admin, text="Duracion", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    duracionPeli.grid(column=0, row=4, ipadx=5, ipady=5, padx=10, pady=10)
+    anioPeli = ttk.Label(ventana_admin, text="Año", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    anioPeli.grid(column=0, row=5, ipadx=5, ipady=5, padx=10, pady=10)
+    directorPeli = ttk.Label(ventana_admin, text="Director", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    directorPeli.grid(column=0, row=6, ipadx=5, ipady=5, padx=10, pady=10)
 
-    tituloEntry = Entry(ventana_admin, textvariable=titulo_pelicula)
+    tituloEntry = Entry(ventana_admin, textvariable=titulo_pelicula, font=styles.ENTRADAS_DE_TEXTO)
     tituloEntry.grid(column=1, row=1)
-    categoriaEntry = Entry(ventana_admin, textvariable=categoria_pelicula)
+    categoriaEntry = Entry(ventana_admin, textvariable=categoria_pelicula, font=styles.ENTRADAS_DE_TEXTO)
     categoriaEntry.grid(column=1, row=2)
-    imagenEntry = Entry(ventana_admin, textvariable=imagen_pelicula)
+    imagenEntry = Entry(ventana_admin, textvariable=imagen_pelicula, font=styles.ENTRADAS_DE_TEXTO)
     imagenEntry.grid(column=1, row=3)
-    duracionEntry = Entry(ventana_admin, textvariable=duracion_pelicula)
+    duracionEntry = Entry(ventana_admin, textvariable=duracion_pelicula, font=styles.ENTRADAS_DE_TEXTO)
     duracionEntry.grid(column=1, row=4)
-    anioEntry = Entry(ventana_admin, textvariable=anio_pelicula)
+    anioEntry = Entry(ventana_admin, textvariable=anio_pelicula, font=styles.ENTRADAS_DE_TEXTO)
     anioEntry.grid(column=1, row=5)
-    directorEntry = Entry(ventana_admin, textvariable=director_pelicula)
+    directorEntry = Entry(ventana_admin, textvariable=director_pelicula, font=styles.ENTRADAS_DE_TEXTO)
     directorEntry.grid(column=1, row=6)
 
-    boton_registrar = ttk.Button(ventana_admin, text="Registrar", command=registrar_peli)
-    boton_registrar.grid(column=0, row=8, sticky=W + E, columnspan=1)
+    boton_registrar = Button(ventana_admin, text="Registrar", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON, command=registrar_peli)
+    boton_registrar.grid(column=0, row=8, sticky=W + E, ipadx=5, ipady=5, padx=5, pady=5, columnspan=1)
 
-    boton_salir = ttk.Button(ventana_admin, text="Salir", command=lambda: ventana_admin.destroy())
-    boton_salir.grid(column=1, row=8, sticky=W + E, columnspan=1)
+    boton_salir = Button(ventana_admin, text="Salir", foreground=styles.FG_BOTON,
+                         activeforeground=styles.AFG_BOTON,
+                         activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_admin.destroy())
+    boton_salir.grid(column=1, row=8, sticky=W + E, ipadx=5, ipady=5, padx=5, pady=5, columnspan=1)
 
-    mensaje = Label(ventana_admin, text="", fg="red")
+    mensaje = Label(ventana_admin, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(column=0, row=7, columnspan=2, sticky=W + E)
 
 
@@ -247,22 +253,24 @@ def editar_Peli():
 
     # ---------------------------#
     ventana_admin = Toplevel()  # Crear una ventana por delante de la principal
+    ventana_admin.config(width=400, height=320, background=styles.BG_VENTANA)
+    ventana_admin.resizable(False, False)
     ventana_admin.title("Edicion de Peliculas")  # Titulo de la ventana
 
-    mensaje = Label(ventana_admin, text="", fg="red")
+    mensaje = Label(ventana_admin, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(column=0, row=1, columnspan=2, sticky=W + E)
 
     style = ttk.Style()
     style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
-                    font=('Calibri', 10))  # Se modifica la fuente de la tabla
+                    font=styles.TABLAS)  # Se modifica la fuente de la tabla
     style.configure("mystyle.Treeview.Heading",
-                    font=('Calibri', 10, 'bold'))  # Se modifica la fuente de las cabeceras
+                    font=styles.TABLAS_CABECERAS)  # Se modifica la fuente de las cabeceras
     style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])
 
     # Estructura de la tabla de Peliculas
     tabla = ttk.Treeview(ventana_admin, height=10, columns=["#0", "#1", "#2", "#3", "#4", "#5", "#6"],
                          style="mystyle.Treeview")
-    tabla.grid(row=0, column=0)
+    tabla.grid(row=0, column=0, ipadx=5, ipady=5, padx=10, pady=10)
     tabla.heading(column="#0", text="ID", anchor=CENTER)
     tabla.heading(column="#1", text="Titulo", anchor=CENTER)
     tabla.heading(column="#2", text="Categoria", anchor=CENTER)
@@ -273,13 +281,19 @@ def editar_Peli():
 
     get_peliculas()
 
-    boton_eliminar = ttk.Button(ventana_admin, text="Eliminar", command=eliminar)
+    boton_eliminar = Button(ventana_admin, text="Eliminar", foreground=styles.FG_BOTON,
+                            activeforeground=styles.AFG_BOTON,
+                            activebackground=styles.ABG_BOTON, command=eliminar)
     boton_eliminar.grid(column=0, row=2, sticky=W + E)
 
-    boton_editar = ttk.Button(ventana_admin, text="Editar", command=editar)
+    boton_editar = Button(ventana_admin, text="Editar", foreground=styles.FG_BOTON,
+                          activeforeground=styles.AFG_BOTON,
+                          activebackground=styles.ABG_BOTON, command=editar)
     boton_editar.grid(column=0, row=3, sticky=W + E)
 
-    boton_salir = ttk.Button(ventana_admin, text="Salir", command=lambda: ventana_admin.destroy())
+    boton_salir = Button(ventana_admin, text="Salir", foreground=styles.FG_BOTON,
+                         activeforeground=styles.AFG_BOTON,
+                         activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_admin.destroy())
     boton_salir.grid(column=0, row=4, sticky=W + E)
 
 
@@ -324,42 +338,49 @@ def add_serie():
             mensaje["text"] = "Debe introducir todos los datos"
 
     ventana_admin = Toplevel()  # Crear una ventana por delante de la principal
+    ventana_admin.config(width=400, height=320, background=styles.BG_VENTANA)
     ventana_admin.title("Registro de series")  # Titulo de la ventana
     ventana_admin.resizable(False, False)
 
-    tituloSerie = Label(ventana_admin, text="Titulo ")
-    tituloSerie.grid(column=0, row=1)
-    categoriaSerie = Label(ventana_admin, text="Categoria ")
-    categoriaSerie.grid(column=0, row=2)
-    imagenSerie = Label(ventana_admin, text="Imagen")
-    imagenSerie.grid(column=0, row=3)
-    temporadasSerie = Label(ventana_admin, text="Temporadas")
-    temporadasSerie.grid(column=0, row=4)
-    capitulosSerie = Label(ventana_admin, text="Capitulos")
-    capitulosSerie.grid(column=0, row=5)
-    duracion_capitulos_serie = Label(ventana_admin, text="Duracion Capitulos")
-    duracion_capitulos_serie.grid(column=0, row=6)
+    tituloSerie = ttk.Label(ventana_admin, text="Titulo", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    tituloSerie.grid(column=0, row=1, ipadx=5, ipady=5, padx=10, pady=10)
+    categoriaSerie = Label(ventana_admin, text="Categoria", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    categoriaSerie.grid(column=0, row=2, ipadx=5, ipady=5, padx=10, pady=10)
+    imagenSerie = Label(ventana_admin, text="Imagen", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    imagenSerie.grid(column=0, row=3, ipadx=5, ipady=5, padx=10, pady=10)
+    temporadasSerie = Label(ventana_admin, text="Temporadas", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    temporadasSerie.grid(column=0, row=4, ipadx=5, ipady=5, padx=10, pady=10)
+    capitulosSerie = Label(ventana_admin, text="Capitulos", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    capitulosSerie.grid(column=0, row=5, ipadx=5, ipady=5, padx=10, pady=10)
+    duracion_capitulos_serie = Label(ventana_admin, text="Duracion Capitulos", background=styles.BG_ETIQUETA,
+                                     font=styles.TEXTOS)
+    duracion_capitulos_serie.grid(column=0, row=6, ipadx=5, ipady=5, padx=10, pady=10)
 
-    tituloEntry = Entry(ventana_admin, textvariable=titulo_serie)
+    tituloEntry = Entry(ventana_admin, textvariable=titulo_serie, font=styles.ENTRADAS_DE_TEXTO)
     tituloEntry.grid(column=1, row=1)
-    categoriaEntry = Entry(ventana_admin, textvariable=categoria_serie)
+    categoriaEntry = Entry(ventana_admin, textvariable=categoria_serie, font=styles.ENTRADAS_DE_TEXTO)
     categoriaEntry.grid(column=1, row=2)
-    imagenEntry = Entry(ventana_admin, textvariable=imagen_serie)
+    imagenEntry = Entry(ventana_admin, textvariable=imagen_serie, font=styles.ENTRADAS_DE_TEXTO)
     imagenEntry.grid(column=1, row=3)
-    temporadasEntry = Entry(ventana_admin, textvariable=temporadas_serie)
+    temporadasEntry = Entry(ventana_admin, textvariable=temporadas_serie, font=styles.ENTRADAS_DE_TEXTO)
     temporadasEntry.grid(column=1, row=4)
-    capitulosEntry = Entry(ventana_admin, textvariable=capitulos_serie)
+    capitulosEntry = Entry(ventana_admin, textvariable=capitulos_serie, font=styles.ENTRADAS_DE_TEXTO)
     capitulosEntry.grid(column=1, row=5)
-    duracion_capitulos_serieEntry = Entry(ventana_admin, textvariable=duracionCapitulos_serie)
+    duracion_capitulos_serieEntry = Entry(ventana_admin, textvariable=duracionCapitulos_serie,
+                                          font=styles.ENTRADAS_DE_TEXTO)
     duracion_capitulos_serieEntry.grid(column=1, row=6)
 
-    boton_registrar = ttk.Button(ventana_admin, text="Registrar", command=registrar_serie)
-    boton_registrar.grid(column=0, row=8, sticky=W + E)
+    boton_registrar = Button(ventana_admin, text="Registrar", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON, command=registrar_serie)
+    boton_registrar.grid(column=0, row=8, sticky=W + E, ipadx=5, ipady=5, padx=5, pady=5, columnspan=1)
 
-    boton_salir = ttk.Button(ventana_admin, text="Salir", command=lambda: ventana_admin.destroy())
-    boton_salir.grid(column=1, row=8, sticky=W + E)
+    boton_salir = Button(ventana_admin, text="Salir", foreground=styles.FG_BOTON,
+                         activeforeground=styles.AFG_BOTON,
+                         activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_admin.destroy())
+    boton_salir.grid(column=1, row=8, sticky=W + E, ipadx=5, ipady=5, padx=5, pady=5, columnspan=1)
 
-    mensaje = Label(ventana_admin, text="", fg="red")
+    mensaje = Label(ventana_admin, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(column=0, row=7, columnspan=2, sticky=W + E)
 
 
@@ -528,22 +549,24 @@ def editar_Serie():
 
     # ---------------------------#
     ventana_admin = Toplevel()  # Crear una ventana por delante de la principal
+    ventana_admin.config(width=400, height=320, background=styles.BG_VENTANA)
+    ventana_admin.resizable(False, False)
     ventana_admin.title("Edicion de Series")  # Titulo de la ventana
 
-    mensaje = Label(ventana_admin, text="", fg="red")
+    mensaje = Label(ventana_admin, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(column=0, row=1, columnspan=2, sticky=W + E)
 
     style = ttk.Style()
     style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
-                    font=('Calibri', 10))  # Se modifica la fuente de la tabla
+                    font=styles.TABLAS)  # Se modifica la fuente de la tabla
     style.configure("mystyle.Treeview.Heading",
-                    font=('Calibri', 10, 'bold'))  # Se modifica la fuente de las cabeceras
+                    font=styles.TABLAS_CABECERAS)  # Se modifica la fuente de las cabeceras
     style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])
 
-    # Estructura de la tabla de Peliculas
+    # Estructura de la tabla de Series
     tabla = ttk.Treeview(ventana_admin, height=10, columns=["#0", "#1", "#2", "#3", "#4", "#5", "#6"],
                          style="mystyle.Treeview")
-    tabla.grid(row=0, column=0)
+    tabla.grid(row=0, column=0, ipadx=5, ipady=5, padx=10, pady=10)
     tabla.heading(column="#0", text="ID", anchor=CENTER)
     tabla.heading(column="#1", text="Titulo", anchor=CENTER)
     tabla.heading(column="#2", text="Categoria", anchor=CENTER)
@@ -554,11 +577,17 @@ def editar_Serie():
 
     get_series()
 
-    boton_eliminar = ttk.Button(ventana_admin, text="Eliminar", command=eliminar)
+    boton_eliminar = Button(ventana_admin, text="Eliminar", foreground=styles.FG_BOTON,
+                            activeforeground=styles.AFG_BOTON,
+                            activebackground=styles.ABG_BOTON, command=eliminar)
     boton_eliminar.grid(column=0, row=2, sticky=W + E)
 
-    boton_editar = ttk.Button(ventana_admin, text="Editar", command=editar)
+    boton_editar = Button(ventana_admin, text="Editar", foreground=styles.FG_BOTON,
+                          activeforeground=styles.AFG_BOTON,
+                          activebackground=styles.ABG_BOTON, command=editar)
     boton_editar.grid(column=0, row=3, sticky=W + E)
 
-    boton_salir = ttk.Button(ventana_admin, text="Salir", command=lambda: ventana_admin.destroy())
+    boton_salir = Button(ventana_admin, text="Salir", foreground=styles.FG_BOTON,
+                         activeforeground=styles.AFG_BOTON,
+                         activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_admin.destroy())
     boton_salir.grid(column=0, row=4, sticky=W + E)
