@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from models.audiovisual import Pelicula, Serie
 import db
+from styles import styles
 
 dict_peliculas_audiovisual = {}
 dict_series_audiovisual = {}
@@ -90,14 +91,15 @@ def mostrar_resultados(resultados, audiovisual, nombre):
                 mensaje["text"] = f"Serie {titulo} añadida a vistas"
 
     ventana_resultados_busqueda = Toplevel()
+    ventana_resultados_busqueda.config(width=400, height=320, background=styles.BG_VENTANA)
     ventana_resultados_busqueda.title("Resultados busqueda")  # Titulo de la ventana
     ventana_resultados_busqueda.resizable(True, True)
 
     style = ttk.Style()
     style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
-                    font=('Calibri', 10))  # Se modifica la fuente de la tabla
+                    font=styles.TABLAS)  # Se modifica la fuente de la tabla
     style.configure("mystyle.Treeview.Heading",
-                    font=('Calibri', 10, 'bold'))  # Se modifica la fuente de las cabeceras
+                    font=styles.TABLAS_CABECERAS)  # Se modifica la fuente de las cabeceras
     style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])
 
     # Estructura de la tabla de Peliculas
@@ -106,7 +108,7 @@ def mostrar_resultados(resultados, audiovisual, nombre):
 
     if audiovisual == "peliculas":
 
-        tabla.grid(row=0, column=0)
+        tabla.grid(row=0, column=0, ipadx=5, ipady=5, padx=10, pady=10)
         tabla.heading(column="#0", text="ID", anchor=CENTER)
         tabla.heading(column="#1", text="Titulo", anchor=CENTER)
         tabla.heading(column="#2", text="Categoria", anchor=CENTER)
@@ -127,24 +129,30 @@ def mostrar_resultados(resultados, audiovisual, nombre):
                                                           pelicula.anio,
                                                           pelicula.director))
 
-        boton_favoritas = ttk.Button(ventana_resultados_busqueda, text="Añadir a favoritas",
-                                     command=partial(favoritos, "peliculas", nombre))
+        boton_favoritas = Button(ventana_resultados_busqueda, text="Añadir a favoritas", foreground=styles.FG_BOTON,
+                                 activeforeground=styles.AFG_BOTON,
+                                 activebackground=styles.ABG_BOTON,
+                                 command=partial(favoritos, "peliculas", nombre))
         boton_favoritas.grid(row=2, column=0, columnspan=2, sticky=W + E)
 
-        boton_vistas = ttk.Button(ventana_resultados_busqueda, text="Pelicula vista",
-                                  command=partial(vistas, "peliculas", nombre))
+        boton_vistas = Button(ventana_resultados_busqueda, text="Pelicula vista", foreground=styles.FG_BOTON,
+                              activeforeground=styles.AFG_BOTON,
+                              activebackground=styles.ABG_BOTON,
+                              command=partial(vistas, "peliculas", nombre))
         boton_vistas.grid(row=3, column=0, columnspan=2, sticky=W + E)
 
-        boton_salir = ttk.Button(ventana_resultados_busqueda, text="Salir",
-                                 command=lambda: ventana_resultados_busqueda.destroy())
+        boton_salir = Button(ventana_resultados_busqueda, text="Salir", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON_SALIR,
+                             command=lambda: ventana_resultados_busqueda.destroy())
         boton_salir.grid(row=4, column=0, columnspan=2, sticky=W + E)
 
-        mensaje = Label(ventana_resultados_busqueda, text="", fg="red")
+        mensaje = Label(ventana_resultados_busqueda, text="", fg="red", background=styles.BG_VENTANA)
         mensaje.grid(row=1, column=0, columnspan=2, sticky=W + E)
 
     if audiovisual == "series":
 
-        tabla.grid(row=0, column=0)
+        tabla.grid(row=0, column=0, ipadx=5, ipady=5, padx=10, pady=10)
         tabla.heading(column="#0", text="ID", anchor=CENTER)
         tabla.heading(column="#1", text="Titulo", anchor=CENTER)
         tabla.heading(column="#2", text="Categoria", anchor=CENTER)
@@ -165,19 +173,25 @@ def mostrar_resultados(resultados, audiovisual, nombre):
                                                        serie.capitulos,
                                                        serie.duracion_capitulo))
 
-        boton_favoritas = ttk.Button(ventana_resultados_busqueda, text="Añadir a favoritas",
-                                     command=partial(favoritos, "series", nombre))
+        boton_favoritas = Button(ventana_resultados_busqueda, text="Añadir a favoritas", foreground=styles.FG_BOTON,
+                                 activeforeground=styles.AFG_BOTON,
+                                 activebackground=styles.ABG_BOTON,
+                                 command=partial(favoritos, "series", nombre))
         boton_favoritas.grid(row=2, column=0, columnspan=2, sticky=W + E)
 
-        boton_vistas = ttk.Button(ventana_resultados_busqueda, text="Serie vista",
-                                  command=partial(vistas, "series", nombre))
+        boton_vistas = Button(ventana_resultados_busqueda, text="Serie vista", foreground=styles.FG_BOTON,
+                              activeforeground=styles.AFG_BOTON,
+                              activebackground=styles.ABG_BOTON,
+                              command=partial(vistas, "series", nombre))
         boton_vistas.grid(row=3, column=0, columnspan=2, sticky=W + E)
 
-        boton_salir = ttk.Button(ventana_resultados_busqueda, text="Salir",
-                                 command=lambda: ventana_resultados_busqueda.destroy())
+        boton_salir = Button(ventana_resultados_busqueda, text="Salir", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON_SALIR,
+                             command=lambda: ventana_resultados_busqueda.destroy())
         boton_salir.grid(row=4, column=0, columnspan=2, sticky=W + E)
 
-        mensaje = Label(ventana_resultados_busqueda, text="", fg="red")
+        mensaje = Label(ventana_resultados_busqueda, text="", fg="red", background=styles.BG_VENTANA)
         mensaje.grid(row=1, column=0, columnspan=2, sticky=W + E)
 
 
@@ -203,23 +217,37 @@ def buscar_audiovisual(audiovisual, nombre):
                     mostrar_resultados(resultados, tipo, nombre_cliente)
 
     ventana_buscar = Toplevel()  # Crear una ventana por delante de la principal
+    ventana_buscar.config(width=400, height=320, background=styles.BG_VENTANA)
     ventana_buscar.title(f"Buscador de {audiovisual}")  # Titulo de la ventana
     ventana_buscar.resizable(True, True)
 
+    modo_label = Label(ventana_buscar, text="Modo de Busqueda", background=styles.BG_ETIQUETA,
+                       font=styles.TEXTOS, anchor=CENTER)
+    modo_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
+
     modo_busqueda = StringVar()
-    radiobutton1 = Radiobutton(ventana_buscar, text="Titulo", variable=modo_busqueda, value="titulo")
-    radiobutton1.grid(row=0, column=0, padx=10, pady=10)
-    radiobutton2 = Radiobutton(ventana_buscar, text="Categoria", variable=modo_busqueda, value="categoria")
-    radiobutton2.grid(row=0, column=1, padx=10, pady=10)
+    modo_busqueda.set(value=1)
+    radiobutton1 = Radiobutton(ventana_buscar, text="Titulo", variable=modo_busqueda, value="titulo",
+                               font=styles.TEXTOS,
+                               background=styles.BG_ETIQUETA)
+    radiobutton1.grid(row=1, column=0, padx=10, pady=10)
+    radiobutton2 = Radiobutton(ventana_buscar, text="Categoria", variable=modo_busqueda, value="categoria",
+                               font=styles.TEXTOS,
+                               background=styles.BG_ETIQUETA)
+    radiobutton2.grid(row=1, column=1, padx=10, pady=10)
 
-    busqueda_entry = Entry(ventana_buscar)
-    busqueda_entry.grid(row=1, column=0, padx=10, pady=10, columnspan=2, sticky=W + E)
+    busqueda_entry = Entry(ventana_buscar, font=styles.ENTRADAS_DE_TEXTO)
+    busqueda_entry.grid(row=2, column=0, padx=10, pady=10, columnspan=2, sticky=W + E)
 
-    boton_buscar = ttk.Button(ventana_buscar, text="Buscar", command=partial(busqueda, audiovisual, nombre))
-    boton_buscar.grid(row=3, column=0, columnspan=2, sticky=W + E)
+    boton_buscar = Button(ventana_buscar, text="Buscar", foreground=styles.FG_BOTON,
+                          activeforeground=styles.AFG_BOTON,
+                          activebackground=styles.ABG_BOTON, command=partial(busqueda, audiovisual, nombre))
+    boton_buscar.grid(row=4, column=0, columnspan=2, sticky=W + E)
 
-    boton_salir = ttk.Button(ventana_buscar, text="Salir", command=lambda: ventana_buscar.destroy())
-    boton_salir.grid(row=4, column=0, columnspan=2, sticky=W + E)
+    boton_salir = Button(ventana_buscar, text="Salir", foreground=styles.FG_BOTON,
+                         activeforeground=styles.AFG_BOTON,
+                         activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_buscar.destroy())
+    boton_salir.grid(row=5, column=0, columnspan=2, sticky=W + E)
 
-    mensaje = Label(ventana_buscar, text="", fg="red")
-    mensaje.grid(column=0, row=2, columnspan=2, sticky=W + E)
+    mensaje = Label(ventana_buscar, text="", fg="red", background=styles.BG_VENTANA)
+    mensaje.grid(column=0, row=3, columnspan=2, sticky=W + E)

@@ -143,77 +143,90 @@ def editar_Peli():
         old_director = tabla.item(tabla.selection())["values"][5]
 
         ventana_editar = Toplevel()
-        ventana_editar.title = "Edicion de peliculas"
+        ventana_editar.title("Edicion de peliculas")
+        ventana_editar.config(width=400, height=320, background=styles.BG_VENTANA)
         ventana_editar.resizable(False, False)
 
         # Configuracion ventana editar
 
-        cabecera = Label(ventana_editar, text="Editar Pelicula", font=("calibri", 40, "bold"))
-        cabecera.grid(column=0, row=0)
+        cabecera = Label(ventana_editar, text="Editar Pelicula", font=styles.ENCABEZADOS,
+                         background=styles.BG_ETIQUETA, anchor=CENTER)
+        cabecera.grid(column=0, row=0, padx=10, pady=10)
 
-        frame_ep = LabelFrame(ventana_editar, text="Editar pelicula")
-        frame_ep.grid(row=1, column=0, columnspan=2, pady=30, padx=30)
+        frame_ep = LabelFrame(ventana_editar, text="Editar pelicula", font=styles.TEXTOS, background=styles.BG_ETIQUETA)
+        frame_ep.grid(row=1, column=0, columnspan=2, pady=30, padx=30, ipadx=5, ipady=5)
 
-        etiqueta_titulo_antiguo = Label(frame_ep, text="Titulo antiguo")
-        etiqueta_titulo_antiguo.grid(row=2, column=0)
+        etiqueta_titulo_antiguo = Label(frame_ep, text="Titulo antiguo", background=styles.BG_ETIQUETA,
+                                        font=styles.TEXTOS)
+        etiqueta_titulo_antiguo.grid(row=2, column=0, ipadx=5, ipady=5)
         input_titulo_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_titulo),
-                                     state="readonly")
-        input_titulo_antiguo.grid(row=2, column=1)
-        etiqueta_titulo_nuevo = Label(frame_ep, text="Titulo nuevo:")
-        etiqueta_titulo_nuevo.grid(row=3, column=0)
-        input_titulo_nuevo = Entry(frame_ep)
-        input_titulo_nuevo.grid(row=3, column=1)
+                                     state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_titulo_antiguo.grid(row=2, column=1, ipadx=5, ipady=5)
+        etiqueta_titulo_nuevo = Label(frame_ep, text="Titulo nuevo", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+        etiqueta_titulo_nuevo.grid(row=3, column=0, ipadx=5, ipady=5)
+        input_titulo_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_titulo_nuevo.grid(row=3, column=1, ipadx=5, ipady=5)
 
-        etiqueta_categoria_antiguo = Label(frame_ep, text="Categoria Antigua")
-        etiqueta_categoria_antiguo.grid(row=4, column=0)
+        etiqueta_categoria_antiguo = Label(frame_ep, text="Categoria Antigua", background=styles.BG_ETIQUETA,
+                                           font=styles.TEXTOS)
+        etiqueta_categoria_antiguo.grid(row=4, column=0, ipadx=5, ipady=5)
         input_categoria_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_categoria),
-                                        state="readonly")
-        input_categoria_antiguo.grid(row=4, column=1)
-        etiqueta_categoria_nuevo = Label(frame_ep, text="Categoria Nueva:")
-        etiqueta_categoria_nuevo.grid(row=5, column=0)
-        input_categoria_nuevo = Entry(frame_ep)
-        input_categoria_nuevo.grid(row=5, column=1)
+                                        state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_categoria_antiguo.grid(row=4, column=1, ipadx=5, ipady=5)
+        etiqueta_categoria_nuevo = Label(frame_ep, text="Categoria Nueva", background=styles.BG_ETIQUETA,
+                                         font=styles.TEXTOS)
+        etiqueta_categoria_nuevo.grid(row=5, column=0, ipadx=5, ipady=5)
+        input_categoria_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_categoria_nuevo.grid(row=5, column=1, ipadx=5, ipady=5)
 
-        etiqueta_imagen_antiguo = Label(frame_ep, text="Imagen Antigua")
-        etiqueta_imagen_antiguo.grid(row=6, column=0)
+        etiqueta_imagen_antiguo = Label(frame_ep, text="Imagen Antigua", background=styles.BG_ETIQUETA,
+                                        font=styles.TEXTOS)
+        etiqueta_imagen_antiguo.grid(row=6, column=0, ipadx=5, ipady=5)
         input_imagen_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_imagen),
-                                     state="readonly")
-        input_imagen_antiguo.grid(row=6, column=1)
-        etiqueta_imagen_nuevo = Label(frame_ep, text="Imagen Nueva:")
-        etiqueta_imagen_nuevo.grid(row=7, column=0)
-        input_imagen_nuevo = Entry(frame_ep)
-        input_imagen_nuevo.grid(row=7, column=1)
+                                     state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_imagen_antiguo.grid(row=6, column=1, ipadx=5, ipady=5)
+        etiqueta_imagen_nuevo = Label(frame_ep, text="Imagen Nueva", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+        etiqueta_imagen_nuevo.grid(row=7, column=0, ipadx=5, ipady=5)
+        input_imagen_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_imagen_nuevo.grid(row=7, column=1, ipadx=5, ipady=5)
 
-        etiqueta_duracion_antiguo = Label(frame_ep, text="Duracion Antigua")
-        etiqueta_duracion_antiguo.grid(row=8, column=0)
+        etiqueta_duracion_antiguo = Label(frame_ep, text="Duracion Antigua", background=styles.BG_ETIQUETA,
+                                          font=styles.TEXTOS)
+        etiqueta_duracion_antiguo.grid(row=8, column=0, ipadx=5, ipady=5)
         input_duracion_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_duracion),
-                                       state="readonly")
-        input_duracion_antiguo.grid(row=8, column=1)
-        etiqueta_duracion_nuevo = Label(frame_ep, text="Duracion Nueva:")
-        etiqueta_duracion_nuevo.grid(row=9, column=0)
-        input_duracion_nuevo = Entry(frame_ep)
-        input_duracion_nuevo.grid(row=9, column=1)
+                                       state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_duracion_antiguo.grid(row=8, column=1, ipadx=5, ipady=5)
+        etiqueta_duracion_nuevo = Label(frame_ep, text="Duracion Nueva", background=styles.BG_ETIQUETA,
+                                        font=styles.TEXTOS)
+        etiqueta_duracion_nuevo.grid(row=9, column=0, ipadx=5, ipady=5)
+        input_duracion_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_duracion_nuevo.grid(row=9, column=1, ipadx=5, ipady=5)
 
-        etiqueta_anio_antiguo = Label(frame_ep, text="Año antiguo")
-        etiqueta_anio_antiguo.grid(row=10, column=0)
-        input_anio_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_anio), state="readonly")
-        input_anio_antiguo.grid(row=10, column=1)
-        etiqueta_anio_nuevo = Label(frame_ep, text="Año Nuevo:")
-        etiqueta_anio_nuevo.grid(row=11, column=0)
-        input_anio_nuevo = Entry(frame_ep)
-        input_anio_nuevo.grid(row=11, column=1)
+        etiqueta_anio_antiguo = Label(frame_ep, text="Año antiguo", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+        etiqueta_anio_antiguo.grid(row=10, column=0, ipadx=5, ipady=5)
+        input_anio_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_anio), state="readonly",
+                                   font=styles.ENTRADAS_DE_TEXTO)
+        input_anio_antiguo.grid(row=10, column=1, ipadx=5, ipady=5)
+        etiqueta_anio_nuevo = Label(frame_ep, text="Año Nuevo", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+        etiqueta_anio_nuevo.grid(row=11, column=0, ipadx=5, ipady=5)
+        input_anio_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_anio_nuevo.grid(row=11, column=1, ipadx=5, ipady=5)
 
-        etiqueta_director_antiguo = Label(frame_ep, text="Director Antiguo")
-        etiqueta_director_antiguo.grid(row=12, column=0)
+        etiqueta_director_antiguo = Label(frame_ep, text="Director Antiguo", background=styles.BG_ETIQUETA,
+                                          font=styles.TEXTOS)
+        etiqueta_director_antiguo.grid(row=12, column=0, ipadx=5, ipady=5)
         input_director_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_director),
-                                       state="readonly")
-        input_director_antiguo.grid(row=12, column=1)
-        etiqueta_director_nuevo = Label(frame_ep, text="Director Nuevo:")
-        etiqueta_director_nuevo.grid(row=13, column=0)
-        input_director_nuevo = Entry(frame_ep)
-        input_director_nuevo.grid(row=13, column=1)
+                                       state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_director_antiguo.grid(row=12, column=1, ipadx=5, ipady=5)
+        etiqueta_director_nuevo = Label(frame_ep, text="Director Nuevo", background=styles.BG_ETIQUETA,
+                                        font=styles.TEXTOS)
+        etiqueta_director_nuevo.grid(row=13, column=0, ipadx=5, ipady=5)
+        input_director_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_director_nuevo.grid(row=13, column=1, ipadx=5, ipady=5)
 
-        boton_salir = ttk.Button(frame_ep, text="Salir", command=lambda: ventana_editar.destroy())
+        boton_salir = Button(frame_ep, text="Salir", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_editar.destroy())
         boton_salir.grid(row=15, sticky=W + E, columnspan=2)
 
         # Boton de actuazlizar
@@ -248,7 +261,9 @@ def editar_Peli():
 
         s = ttk.Style()
         s.configure("my.TButton")
-        boton_actualizar = ttk.Button(frame_ep, text="Actualizar Pelicula", command=actualiza)
+        boton_actualizar = Button(frame_ep, text="Actualizar Pelicula", foreground=styles.FG_BOTON,
+                                  activeforeground=styles.AFG_BOTON,
+                                  activebackground=styles.ABG_BOTON, command=actualiza)
         boton_actualizar.grid(row=14, columnspan=2, sticky=W + E)
 
     # ---------------------------#
@@ -438,79 +453,97 @@ def editar_Serie():
         old_duracion_capitulo = tabla.item(tabla.selection())["values"][5]
 
         ventana_editar = Toplevel()
-        ventana_editar.title = "Edicion de series"
+        ventana_editar.title("Edicion de series")
+        ventana_editar.config(width=400, height=320, background=styles.BG_VENTANA)
         ventana_editar.resizable(False, False)
 
         # Configuracion ventana editar
 
-        cabecera = Label(ventana_editar, text="Editar Serie", font=("calibri", 40, "bold"))
-        cabecera.grid(column=0, row=0)
+        cabecera = Label(ventana_editar, text="Editar Serie", font=styles.ENCABEZADOS,
+                         background=styles.BG_ETIQUETA, anchor=CENTER)
+        cabecera.grid(column=0, row=0, padx=10, pady=10)
 
-        frame_ep = LabelFrame(ventana_editar, text="Editar serie")
-        frame_ep.grid(row=1, column=0, columnspan=2, pady=30, padx=30)
+        frame_ep = LabelFrame(ventana_editar, text="Editar serie", font=styles.TEXTOS, background=styles.BG_ETIQUETA)
+        frame_ep.grid(row=1, column=0, columnspan=2, pady=30, padx=30, ipadx=5, ipady=5)
 
-        etiqueta_titulo_antiguo = Label(frame_ep, text="Titulo antiguo")
-        etiqueta_titulo_antiguo.grid(row=2, column=0)
+        etiqueta_titulo_antiguo = Label(frame_ep, text="Titulo antiguo", background=styles.BG_ETIQUETA,
+                                        font=styles.TEXTOS)
+        etiqueta_titulo_antiguo.grid(row=2, column=0, ipadx=5, ipady=5)
         input_titulo_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_titulo),
-                                     state="readonly")
-        input_titulo_antiguo.grid(row=2, column=1)
-        etiqueta_titulo_nuevo = Label(frame_ep, text="Titulo nuevo:")
-        etiqueta_titulo_nuevo.grid(row=3, column=0)
-        input_titulo_nuevo = Entry(frame_ep)
-        input_titulo_nuevo.grid(row=3, column=1)
+                                     state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_titulo_antiguo.grid(row=2, column=1, ipadx=5, ipady=5)
+        etiqueta_titulo_nuevo = Label(frame_ep, text="Titulo nuevo", background=styles.BG_ETIQUETA,
+                                      font=styles.TEXTOS)
+        etiqueta_titulo_nuevo.grid(row=3, column=0, ipadx=5, ipady=5)
+        input_titulo_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_titulo_nuevo.grid(row=3, column=1, ipadx=5, ipady=5)
 
-        etiqueta_categoria_antiguo = Label(frame_ep, text="Categoria Antigua")
-        etiqueta_categoria_antiguo.grid(row=4, column=0)
+        etiqueta_categoria_antiguo = Label(frame_ep, text="Categoria Antigua", background=styles.BG_ETIQUETA,
+                                           font=styles.TEXTOS)
+        etiqueta_categoria_antiguo.grid(row=4, column=0, ipadx=5, ipady=5)
         input_categoria_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_categoria),
-                                        state="readonly")
-        input_categoria_antiguo.grid(row=4, column=1)
-        etiqueta_categoria_nuevo = Label(frame_ep, text="Categoria Nueva:")
-        etiqueta_categoria_nuevo.grid(row=5, column=0)
-        input_categoria_nuevo = Entry(frame_ep)
-        input_categoria_nuevo.grid(row=5, column=1)
+                                        state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_categoria_antiguo.grid(row=4, column=1, ipadx=5, ipady=5)
+        etiqueta_categoria_nuevo = Label(frame_ep, text="Categoria Nueva", background=styles.BG_ETIQUETA,
+                                         font=styles.TEXTOS)
+        etiqueta_categoria_nuevo.grid(row=5, column=0, ipadx=5, ipady=5)
+        input_categoria_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_categoria_nuevo.grid(row=5, column=1, ipadx=5, ipady=5)
 
-        etiqueta_imagen_antiguo = Label(frame_ep, text="Imagen Antigua")
-        etiqueta_imagen_antiguo.grid(row=6, column=0)
+        etiqueta_imagen_antiguo = Label(frame_ep, text="Imagen Antigua", background=styles.BG_ETIQUETA,
+                                        font=styles.TEXTOS)
+        etiqueta_imagen_antiguo.grid(row=6, column=0, ipadx=5, ipady=5)
         input_imagen_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_imagen),
-                                     state="readonly")
-        input_imagen_antiguo.grid(row=6, column=1)
-        etiqueta_imagen_nuevo = Label(frame_ep, text="Imagen Nueva:")
-        etiqueta_imagen_nuevo.grid(row=7, column=0)
-        input_imagen_nuevo = Entry(frame_ep)
-        input_imagen_nuevo.grid(row=7, column=1)
+                                     state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_imagen_antiguo.grid(row=6, column=1, ipadx=5, ipady=5)
+        etiqueta_imagen_nuevo = Label(frame_ep, text="Imagen Nueva", background=styles.BG_ETIQUETA,
+                                      font=styles.TEXTOS)
+        etiqueta_imagen_nuevo.grid(row=7, column=0, ipadx=5, ipady=5)
+        input_imagen_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_imagen_nuevo.grid(row=7, column=1, ipadx=5, ipady=5)
 
-        etiqueta_temporadas_antiguo = Label(frame_ep, text="Temporadas antiguo")
-        etiqueta_temporadas_antiguo.grid(row=8, column=0)
+        etiqueta_temporadas_antiguo = Label(frame_ep, text="Temporadas antiguo", background=styles.BG_ETIQUETA,
+                                            font=styles.TEXTOS)
+        etiqueta_temporadas_antiguo.grid(row=8, column=0, ipadx=5, ipady=5)
         input_temporadas_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_temporadas),
-                                         state="readonly")
-        input_temporadas_antiguo.grid(row=8, column=1)
-        etiqueta_temporadas_nuevo = Label(frame_ep, text="Temporadas nuevo:")
-        etiqueta_temporadas_nuevo.grid(row=9, column=0)
-        input_temporadas_nuevo = Entry(frame_ep)
-        input_temporadas_nuevo.grid(row=9, column=1)
+                                         state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_temporadas_antiguo.grid(row=8, column=1, ipadx=5, ipady=5)
+        etiqueta_temporadas_nuevo = Label(frame_ep, text="Temporadas nuevo", background=styles.BG_ETIQUETA,
+                                          font=styles.TEXTOS)
+        etiqueta_temporadas_nuevo.grid(row=9, column=0, ipadx=5, ipady=5)
+        input_temporadas_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_temporadas_nuevo.grid(row=9, column=1, ipadx=5, ipady=5)
 
-        etiqueta_capitulos_antiguo = Label(frame_ep, text="Capitulos antiguo")
-        etiqueta_capitulos_antiguo.grid(row=10, column=0)
+        etiqueta_capitulos_antiguo = Label(frame_ep, text="Capitulos antiguo", background=styles.BG_ETIQUETA,
+                                           font=styles.TEXTOS)
+        etiqueta_capitulos_antiguo.grid(row=10, column=0, ipadx=5, ipady=5)
         input_capitulos_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_capitulos),
-                                        state="readonly")
-        input_capitulos_antiguo.grid(row=10, column=1)
-        etiqueta_capitulos_nuevo = Label(frame_ep, text="Capitulos nuevo:")
-        etiqueta_capitulos_nuevo.grid(row=11, column=0)
-        input_capitulos_nuevo = Entry(frame_ep)
-        input_capitulos_nuevo.grid(row=11, column=1)
+                                        state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_capitulos_antiguo.grid(row=10, column=1, ipadx=5, ipady=5)
+        etiqueta_capitulos_nuevo = Label(frame_ep, text="Capitulos nuevo", background=styles.BG_ETIQUETA,
+                                         font=styles.TEXTOS)
+        etiqueta_capitulos_nuevo.grid(row=11, column=0, ipadx=5, ipady=5)
+        input_capitulos_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_capitulos_nuevo.grid(row=11, column=1, ipadx=5, ipady=5)
 
-        etiqueta_duracioncapitulos_antiguo = Label(frame_ep, text="Duracion de capitulos antiguo")
-        etiqueta_duracioncapitulos_antiguo.grid(row=12, column=0)
+        etiqueta_duracioncapitulos_antiguo = Label(frame_ep, text="Duracion de capitulos antiguo",
+                                                   background=styles.BG_ETIQUETA,
+                                                   font=styles.TEXTOS)
+        etiqueta_duracioncapitulos_antiguo.grid(row=12, column=0, ipadx=5, ipady=5)
         input_duracioncapitulos_antiguo = Entry(frame_ep,
                                                 textvariable=StringVar(ventana_editar, value=old_duracion_capitulo),
-                                                state="readonly")
-        input_duracioncapitulos_antiguo.grid(row=12, column=1)
-        etiqueta_duracioncapitulos_nuevo = Label(frame_ep, text="Duracion de capitulos nuevo:")
-        etiqueta_duracioncapitulos_nuevo.grid(row=13, column=0)
-        input_duracioncapitulos_nuevo = Entry(frame_ep)
-        input_duracioncapitulos_nuevo.grid(row=13, column=1)
+                                                state="readonly", font=styles.ENTRADAS_DE_TEXTO)
+        input_duracioncapitulos_antiguo.grid(row=12, column=1, ipadx=5, ipady=5)
+        etiqueta_duracioncapitulos_nuevo = Label(frame_ep, text="Duracion de capitulos nuevo",
+                                                 background=styles.BG_ETIQUETA,
+                                                 font=styles.TEXTOS)
+        etiqueta_duracioncapitulos_nuevo.grid(row=13, column=0, ipadx=5, ipady=5)
+        input_duracioncapitulos_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_duracioncapitulos_nuevo.grid(row=13, column=1, ipadx=5, ipady=5)
 
-        boton_salir = ttk.Button(frame_ep, text="Salir", command=lambda: ventana_editar.destroy())
+        boton_salir = Button(frame_ep, text="Salir",foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_editar.destroy())
         boton_salir.grid(row=15, sticky=W + E, columnspan=2)
 
         def actualiza():
@@ -544,7 +577,9 @@ def editar_Serie():
 
         s = ttk.Style()
         s.configure("my.TButton")
-        boton_actualizar = ttk.Button(frame_ep, text="Actualizar Serie", command=actualiza)
+        boton_actualizar = Button(frame_ep, text="Actualizar Serie", foreground=styles.FG_BOTON,
+                                  activeforeground=styles.AFG_BOTON,
+                                  activebackground=styles.ABG_BOTON, command=actualiza)
         boton_actualizar.grid(row=14, columnspan=2, sticky=W + E)
 
     # ---------------------------#

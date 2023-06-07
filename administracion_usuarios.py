@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 
 from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 from clientes_catalogos import config_grafica
+from styles import styles
 
 
 def add_usuario():
@@ -21,31 +22,39 @@ def add_usuario():
             db.session.commit()
             mensaje["fg"] = "blue"
             mensaje["text"] = f"Usuario {nombre_Entry.get()} añadido con exito"
+            nombre_Entry.delete(0, "end")
+            pass_Entry.delete(0, "end")
+
         else:
             mensaje["fg"] = "red"
             mensaje["text"] = "Debe introducir todos los datos"
 
     ventana_admin_usuario = Toplevel()  # Crear una ventana por delante de la principal
+    ventana_admin_usuario.config(width=400, height=320, background=styles.BG_VENTANA)
     ventana_admin_usuario.title("Registro de usuarios")  # Titulo de la ventana
     ventana_admin_usuario.resizable(False, False)
 
-    nombre_usuario = Label(ventana_admin_usuario, text="Nombre")
-    nombre_usuario.grid(column=0, row=1)
-    pass_usuario = Label(ventana_admin_usuario, text="Password")
-    pass_usuario.grid(column=0, row=2)
+    nombre_usuario = Label(ventana_admin_usuario, text="Nombre", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    nombre_usuario.grid(column=0, row=1, ipadx=5, ipady=5, padx=10, pady=10)
+    pass_usuario = Label(ventana_admin_usuario, text="Password", background=styles.BG_ETIQUETA, font=styles.TEXTOS)
+    pass_usuario.grid(column=0, row=2, ipadx=5, ipady=5, padx=10, pady=10)
 
-    nombre_Entry = Entry(ventana_admin_usuario, textvariable=StringVar())
-    nombre_Entry.grid(column=1, row=1)
-    pass_Entry = Entry(ventana_admin_usuario, textvariable=StringVar())
-    pass_Entry.grid(column=1, row=2)
+    nombre_Entry = Entry(ventana_admin_usuario, textvariable=StringVar(), font=styles.ENTRADAS_DE_TEXTO)
+    nombre_Entry.grid(column=1, row=1, ipadx=5, ipady=5, padx=10, pady=10)
+    pass_Entry = Entry(ventana_admin_usuario, textvariable=StringVar(), font=styles.ENTRADAS_DE_TEXTO)
+    pass_Entry.grid(column=1, row=2, ipadx=5, ipady=5, padx=10, pady=10)
 
-    boton_registrar = ttk.Button(ventana_admin_usuario, text="Registrar", command=registrar_usuario)
+    boton_registrar = Button(ventana_admin_usuario, text="Registrar", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON, command=registrar_usuario)
     boton_registrar.grid(column=0, row=4, sticky=W + E, columnspan=1)
 
-    boton_salir = ttk.Button(ventana_admin_usuario, text="Salir", command=lambda: ventana_admin_usuario.destroy())
+    boton_salir = Button(ventana_admin_usuario, text="Salir", foreground=styles.FG_BOTON,
+                         activeforeground=styles.AFG_BOTON,
+                         activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_admin_usuario.destroy())
     boton_salir.grid(column=1, row=4, sticky=W + E, columnspan=1)
 
-    mensaje = Label(ventana_admin_usuario, text="", fg="red")
+    mensaje = Label(ventana_admin_usuario, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(column=0, row=3, columnspan=2, sticky=W + E)
 
 
@@ -93,35 +102,45 @@ def gestion_usuarios():
         old_pass = tabla.item(tabla.selection())["values"][1]
 
         ventana_editar = Toplevel()
-        ventana_editar.title = "Edicion de usuarios"
+        ventana_editar.title("Edicion de usuarios")
+        ventana_editar.config(width=400, height=320, background=styles.BG_VENTANA)
         ventana_editar.resizable(False, False)
 
-        cabecera = Label(ventana_editar, text="Editar Usuario", font=("calibri", 40, "bold"))
-        cabecera.grid(column=0, row=0)
+        cabecera = Label(ventana_editar, text="Editar Usuario", font=styles.ENCABEZADOS,
+                         background=styles.BG_ETIQUETA, anchor=CENTER)
+        cabecera.grid(column=0, row=0, padx=10, pady=10)
 
-        frame_ep = LabelFrame(ventana_editar, text="Editar Usuario")
-        frame_ep.grid(row=1, column=0, columnspan=2, pady=30, padx=30)
+        frame_ep = LabelFrame(ventana_editar, text="Editar Usuario", font=styles.TEXTOS, background=styles.BG_ETIQUETA)
+        frame_ep.grid(row=1, column=0, columnspan=2, pady=30, padx=30, ipadx=5, ipady=5)
 
-        etiqueta_nombre_antiguo = Label(frame_ep, text="Nombre antiguo")
-        etiqueta_nombre_antiguo.grid(row=2, column=0)
+        etiqueta_nombre_antiguo = Label(frame_ep, text="Nombre antiguo", background=styles.BG_ETIQUETA,
+                                        font=styles.TEXTOS)
+        etiqueta_nombre_antiguo.grid(row=2, column=0, ipadx=5, ipady=5)
         input_nombre_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_nombre),
+                                     font=styles.ENTRADAS_DE_TEXTO,
                                      state="readonly")
-        input_nombre_antiguo.grid(row=2, column=1)
-        etiqueta_nombre_nuevo = Label(frame_ep, text="Nombre nuevo:")
-        etiqueta_nombre_nuevo.grid(row=3, column=0)
-        input_nombre_nuevo = Entry(frame_ep)
-        input_nombre_nuevo.grid(row=3, column=1)
+        input_nombre_antiguo.grid(row=2, column=1, ipadx=5, ipady=5)
+        etiqueta_nombre_nuevo = Label(frame_ep, text="Nombre nuevo", background=styles.BG_ETIQUETA,
+                                      font=styles.TEXTOS)
+        etiqueta_nombre_nuevo.grid(row=3, column=0, ipadx=5, ipady=5)
+        input_nombre_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_nombre_nuevo.grid(row=3, column=1, ipadx=5, ipady=5)
 
-        etiqueta_pass_antiguo = Label(frame_ep, text="Categoria Antigua")
-        etiqueta_pass_antiguo.grid(row=4, column=0)
-        input_pass_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_pass), state="readonly")
-        input_pass_antiguo.grid(row=4, column=1)
-        etiqueta_pass_nuevo = Label(frame_ep, text="Contraseña Nueva:")
-        etiqueta_pass_nuevo.grid(row=5, column=0)
-        input_pass_nuevo = Entry(frame_ep)
-        input_pass_nuevo.grid(row=5, column=1)
+        etiqueta_pass_antiguo = Label(frame_ep, text="Contraseña Antigua", background=styles.BG_ETIQUETA,
+                                      font=styles.TEXTOS)
+        etiqueta_pass_antiguo.grid(row=4, column=0, ipadx=5, ipady=5)
+        input_pass_antiguo = Entry(frame_ep, textvariable=StringVar(ventana_editar, value=old_pass),
+                                   font=styles.ENTRADAS_DE_TEXTO, state="readonly")
+        input_pass_antiguo.grid(row=4, column=1, ipadx=5, ipady=5)
+        etiqueta_pass_nuevo = Label(frame_ep, text="Contraseña Nueva", background=styles.BG_ETIQUETA,
+                                    font=styles.TEXTOS)
+        etiqueta_pass_nuevo.grid(row=5, column=0, ipadx=5, ipady=5)
+        input_pass_nuevo = Entry(frame_ep, font=styles.ENTRADAS_DE_TEXTO)
+        input_pass_nuevo.grid(row=5, column=1, ipadx=5, ipady=5)
 
-        boton_salir = ttk.Button(frame_ep, text="Salir", command=lambda: ventana_editar.destroy())
+        boton_salir = Button(frame_ep, text="Salir", foreground=styles.FG_BOTON,
+                             activeforeground=styles.AFG_BOTON,
+                             activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_editar.destroy())
         boton_salir.grid(row=7, sticky=W + E, columnspan=2)
 
         def actualiza():
@@ -143,49 +162,61 @@ def gestion_usuarios():
 
         s = ttk.Style()
         s.configure("my.TButton")
-        boton_actualizar = ttk.Button(frame_ep, text="Actualizar Usuario", command=actualiza)
+        boton_actualizar = Button(frame_ep, text="Actualizar Usuario", foreground=styles.FG_BOTON,
+                                  activeforeground=styles.AFG_BOTON,
+                                  activebackground=styles.ABG_BOTON, command=actualiza)
         boton_actualizar.grid(row=6, columnspan=2, sticky=W + E)
 
     # ---------------------------#
     ventana_gestion_usuarios = Toplevel()
+    ventana_gestion_usuarios.config(width=400, height=320, background=styles.BG_VENTANA)
     ventana_gestion_usuarios.title("Gestion de Usuarios")  # Titulo de la ventana
     ventana_gestion_usuarios.resizable(False, False)
 
     style = ttk.Style()
     style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
-                    font=('Calibri', 10))  # Se modifica la fuente de la tabla
+                    font=styles.TABLAS)  # Se modifica la fuente de la tabla
     style.configure("mystyle.Treeview.Heading",
-                    font=('Calibri', 10, 'bold'))  # Se modifica la fuente de las cabeceras
+                    font=styles.TABLAS_CABECERAS)  # Se modifica la fuente de las cabeceras
     style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])
 
     # Estructura de la tabla de Peliculas
     tabla = ttk.Treeview(ventana_gestion_usuarios, height=10, columns=["#0", "#1", "#2"],
                          style="mystyle.Treeview")
-    tabla.grid(column=0, row=0)
+    tabla.grid(column=0, row=0, ipadx=5, ipady=5, padx=10, pady=10)
     tabla.heading(column="#0", text="ID", anchor=CENTER)
     tabla.heading(column="#1", text="Nombre", anchor=CENTER)
     tabla.heading(column="#2", text="Contraseña", anchor=CENTER)
 
-    mensaje = Label(ventana_gestion_usuarios, text="", fg="red")
+    mensaje = Label(ventana_gestion_usuarios, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(column=0, row=1, columnspan=2, sticky=W + E)
 
-    boton_registrar_usuario = ttk.Button(ventana_gestion_usuarios, text="Registrar", command=add_usuario)
+    boton_registrar_usuario = Button(ventana_gestion_usuarios, text="Registrar", foreground=styles.FG_BOTON,
+                                     activeforeground=styles.AFG_BOTON,
+                                     activebackground=styles.ABG_BOTON, command=add_usuario)
     boton_registrar_usuario.grid(column=0, row=2, sticky=W + E)
-    boton_registrar_usuario = ttk.Button(ventana_gestion_usuarios, text="Eliminar", command=eliminar_usuario)
+    boton_registrar_usuario = Button(ventana_gestion_usuarios, text="Eliminar", foreground=styles.FG_BOTON,
+                                     activeforeground=styles.AFG_BOTON,
+                                     activebackground=styles.ABG_BOTON, command=eliminar_usuario)
     boton_registrar_usuario.grid(column=0, row=3, sticky=W + E)
-    boton_registrar_usuario = ttk.Button(ventana_gestion_usuarios, text="Editar", command=editar_usuario)
+    boton_registrar_usuario = Button(ventana_gestion_usuarios, text="Editar", foreground=styles.FG_BOTON,
+                                     activeforeground=styles.AFG_BOTON,
+                                     activebackground=styles.ABG_BOTON, command=editar_usuario)
     boton_registrar_usuario.grid(column=0, row=4, sticky=W + E)
-    boton_actualizar = ttk.Button(ventana_gestion_usuarios, text="Actualizar", command=get_usuarios)
+    boton_actualizar = Button(ventana_gestion_usuarios, text="Actualizar", foreground=styles.FG_BOTON,
+                              activeforeground=styles.AFG_BOTON,
+                              activebackground=styles.ABG_BOTON, command=get_usuarios)
     boton_actualizar.grid(column=0, row=5, sticky=W + E)
 
-    boton_salir = ttk.Button(ventana_gestion_usuarios, text="Salir", command=lambda: ventana_gestion_usuarios.destroy())
+    boton_salir = Button(ventana_gestion_usuarios, text="Salir", foreground=styles.FG_BOTON,
+                         activeforeground=styles.AFG_BOTON,
+                         activebackground=styles.ABG_BOTON_SALIR, command=lambda: ventana_gestion_usuarios.destroy())
     boton_salir.grid(column=0, row=6, sticky=W + E)
 
     get_usuarios()
 
 
 def graficas_usuarios():
-    # revision de esta funcion
     # Creacion de la ventana para graficas
     ventana_graficas = Toplevel()
     ventana_graficas.title("Graficas de Usuarios")  # Titulo de la ventana
@@ -198,8 +229,10 @@ def graficas_usuarios():
         leyendas.append(i[:-7])
         cantidad_vistas.append(len(x))
 
+    # crear la grafica de sectores
     fig, ax = plt.subplots()
     ax.pie(cantidad_vistas)
     ax.legend(leyendas, loc='upper right')
 
+    # aplicar la configuracion
     config_grafica(fig, ventana_graficas)
