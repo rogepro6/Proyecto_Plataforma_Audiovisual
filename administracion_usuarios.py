@@ -4,6 +4,8 @@ from tkinter import ttk
 import db
 from models.usuarios import Usuario
 import matplotlib.pyplot as plt
+from collections import defaultdict
+from itertools import chain
 
 from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 from clientes_catalogos import config_grafica
@@ -216,23 +218,65 @@ def gestion_usuarios():
     get_usuarios()
 
 
-def graficas_usuarios():
+def graficas_usuarios(audiovisual):
     # Creacion de la ventana para graficas
     ventana_graficas = Toplevel()
-    ventana_graficas.title("Graficas de Usuarios")  # Titulo de la ventana
+    ventana_graficas.title(f"{audiovisual} vistas por los Usuarios")  # Titulo de la ventana
     ventana_graficas.resizable(False, False)
 
-    # calcular las leyendas
+    # calcular las leyendas y las cantidades
     leyendas = []
-    cantidad_vistas = []
-    for i, x in dict_peliculas_audiovisual.items():
-        leyendas.append(i[:-7])
-        cantidad_vistas.append(len(x))
+    cantidades = []
+    if audiovisual == "Peliculas":
+        for i, x in dict_peliculas_audiovisual.items():
+            if i[-7:] == "_vistas":
+                leyendas.append(i[:-7])
+                cantidades.append(len(x))
+    elif audiovisual == "Series":
+        for i, x in dict_series_audiovisual.items():
+            if i[-7:] == "_vistas":
+                leyendas.append(i[:-7])
+                cantidades.append(len(x))
 
     # crear la grafica de sectores
     fig, ax = plt.subplots()
-    ax.pie(cantidad_vistas)
-    ax.legend(leyendas, loc='upper right')
+    ax.pie(cantidades)
+    ax.legend(leyendas, loc='lower right')
 
     # aplicar la configuracion
+    config_grafica(fig, ventana_graficas)
+
+
+def graficas_totales():
+    # Creacion de la ventana para graficas
+    ventana_graficas = Toplevel()
+    ventana_graficas.title("Graficas totales")  # Titulo de la ventana
+    ventana_graficas.resizable(False, False)
+
+    #Creamos un diccionario convinado para calcular los visionados totales
+    dict_convinado = defaultdict(list)
+    for k, v in chain(dict_peliculas_audiovisual.items(), dict_series_audiovisual.items()):
+        dict_convinado[k].append(v)
+
+    #Calculamos los datos de las graficas
+    nombres_usuario = []
+    cantidades_vistas = []
+    for k, items in dict_convinado.items():
+        total = 0
+        if k[-7:] == "_vistas":
+            for item in items:
+                total += len(item)
+            cantidades_vistas.append(total)
+            nombres_usuario.append(k[:-7])
+
+
+    #print(dict_convinado)
+    #print(dict_peliculas_audiovisual)
+    #print(dict_series_audiovisual)
+    #print(nombres_usuario)
+    #print(cantidades_vistas)
+
+    fig, ax = plt.subplots()
+    ax.bar(nombres_usuario, cantidades_vistas)
+
     config_grafica(fig, ventana_graficas)

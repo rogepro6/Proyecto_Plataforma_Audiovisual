@@ -6,7 +6,7 @@ import db
 from styles import styles
 from models.usuarios import Usuario
 from administracion_audiovisual import add_pelicula, add_serie, editar_Serie, editar_Peli
-from administracion_usuarios import gestion_usuarios, graficas_usuarios
+from administracion_usuarios import gestion_usuarios, graficas_usuarios, graficas_totales
 from clientes_busquedas import buscar_audiovisual
 from clientes_catalogos import catalogos, grafica_tiempo, grafica_vision
 
@@ -137,22 +137,32 @@ def administracion():
     editarPeli = Button(ventana_admin, text="Editar", foreground=styles.FG_BOTON,
                         activeforeground=styles.AFG_BOTON,
                         activebackground=styles.ABG_BOTON, command=editar_Peli)
-    editarPeli.grid(column=3, row=1, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E)
+    editarPeli.grid(column=3, row=1, ipadx=5, ipady=5, padx=5, pady=5, columnspan=2, sticky=W + E)
 
     editarSerie = Button(ventana_admin, text="Editar", foreground=styles.FG_BOTON,
                          activeforeground=styles.AFG_BOTON,
                          activebackground=styles.ABG_BOTON, command=editar_Serie)
-    editarSerie.grid(column=3, row=2, ipadx=5, ipady=5, padx=5, pady=5, sticky=W + E)
+    editarSerie.grid(column=3, row=2, ipadx=5, ipady=5, padx=5, pady=5, columnspan=2, sticky=W + E)
 
     controlUsuarios = Button(ventana_admin, text="Gestion Usuarios", foreground=styles.FG_BOTON,
                              activeforeground=styles.AFG_BOTON,
                              activebackground=styles.ABG_BOTON, command=gestion_usuarios)
     controlUsuarios.grid(column=0, row=4, ipadx=5, ipady=5, padx=5, pady=5, columnspan=4, sticky=W + E)
 
-    graficasUsuarios = Button(ventana_admin, text="Graficas de Usuarios", foreground=styles.FG_BOTON,
-                              activeforeground=styles.AFG_BOTON,
-                              activebackground=styles.ABG_BOTON, command=graficas_usuarios)
-    graficasUsuarios.grid(column=0, row=5, ipadx=5, ipady=5, padx=5, pady=5, columnspan=4, sticky=W + E)
+    graficasUsuarios_pelis = Button(ventana_admin, text="Graficas de Peliculas", foreground=styles.FG_BOTON,
+                                    activeforeground=styles.AFG_BOTON,
+                                    activebackground=styles.ABG_BOTON, command=partial(graficas_usuarios, "Peliculas"))
+    graficasUsuarios_pelis.grid(column=0, row=5, ipadx=5, ipady=5, padx=5, pady=5, columnspan=1, sticky=W + E)
+
+    graficasUsuarios_series = Button(ventana_admin, text="Graficas de Series", foreground=styles.FG_BOTON,
+                                     activeforeground=styles.AFG_BOTON,
+                                     activebackground=styles.ABG_BOTON, command=partial(graficas_usuarios, "Series"))
+    graficasUsuarios_series.grid(column=1, row=5, ipadx=5, ipady=5, padx=5, pady=5, columnspan=1, sticky=W + E)
+
+    graficasUsuarios_totales = Button(ventana_admin, text="Graficas totales", foreground=styles.FG_BOTON,
+                                      activeforeground=styles.AFG_BOTON,
+                                      activebackground=styles.ABG_BOTON, command=graficas_totales)
+    graficasUsuarios_totales.grid(column=2, row=5, ipadx=5, ipady=5, padx=5, pady=5, columnspan=2, sticky=W + E)
 
     boton_salir = Button(ventana_admin, text="Salir", foreground=styles.FG_BOTON,
                          activeforeground=styles.AFG_BOTON,

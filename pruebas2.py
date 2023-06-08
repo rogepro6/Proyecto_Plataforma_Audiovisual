@@ -1,15 +1,20 @@
-diccionario = {"roge_fav": [1, 2, 3],
-               "luis_fav": [3, 4, 5],
-               "paco_fav": [4, 5, 6, 7]}
-nombres = []
+from collections import defaultdict
+from itertools import chain
 
-for i, x in diccionario.items():
-    nombres.append(i[:-4])
-    print(len(x))
+d1 = {"Python": [1, 2], "C": [3, 4, 5]}
+d2 = {"Java": [4], "C": [3]}
 
-print(nombres)
+dict3 = defaultdict(list)
+for k, v in chain(d1.items(), d2.items()):
+    dict3[k].append(v)
 
-palabra = "rogelio_favoritos"
+print(dict3)
+totales = []
+for k, items in dict3.items():
+    total = 0
+    if k == "C":
+        for item in items:
+            total += len(item)
+        totales.append(total)
 
-nombre = palabra[:-10]
-print(nombre)
+print(totales)

@@ -1,23 +1,28 @@
-import db
-from models import audiovisual
-from math import ceil
+lista =["roge", "paco", "luis"]
 
-# Calcular el numero de  graficas a mostrar
-    users = db.session.query(Usuario).all()
-    filas = ceil(len(users) / 2)
-    print(dict_peliculas_audiovisual)
-    len(dict_peliculas_audiovisual)
-
-fig, ax = plt.subplots(filas, 2, sharey=True, sharex=True)
-    tiempo_empleado = [6, 6]
-    tipo_audiovisual = ["Series", "Peliculas"]
-
-if filas >= 2:
-    for i in range(filas):
-        for j in range(2):
-            ax[i, j].barh(tipo_audiovisual, tiempo_empleado)
-    config_grafica(fig, ventana_graficas)
+if "roger" not in lista:
+    print("no esta")
 else:
-    print("Pocos clientes para mostrar las graficas")
+    print("Si esta")
 
 
+diccionario = {"roge":["una", "dos", "tres"],
+               "paco":["una", "dos"]}
+
+if "roge" in diccionario.keys():
+    print()
+else:
+    print("no")
+
+
+
+    for user_p, peliculas in dict_peliculas_audiovisual.items():
+
+        cantidad = 0
+        if user_p[-7:] == "_vistas":
+            nombres_usuario.append(user_p[:-7])
+            cantidad += len(peliculas)
+            if user_p in dict_series_audiovisual.keys():
+                cantidad += len(dict_series_audiovisual[user_p])
+
+            cantidades_vistas.append(cantidad)
