@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-import db
+
+from database import db
 from styles import styles
 from models.audiovisual import Pelicula, Serie
 

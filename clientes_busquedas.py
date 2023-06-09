@@ -1,9 +1,10 @@
-from functools import partial
 from tkinter import *
 from tkinter import ttk
-from models.audiovisual import Pelicula, Serie
-import db
+from functools import partial
+
+from database import db
 from styles import styles
+from models.audiovisual import Pelicula, Serie
 
 dict_peliculas_audiovisual = {}
 dict_series_audiovisual = {}

@@ -1,7 +1,6 @@
-import db
+from database import db
 from models.usuarios import Usuario
 from main import interfazUsuario
-
 from models.audiovisual import Pelicula, Serie
 
 if __name__ == "__main__":
@@ -9,17 +8,17 @@ if __name__ == "__main__":
     db.Base.metadata.drop_all(bind=db.engine, checkfirst=True)
     db.Base.metadata.create_all(db.engine)
 
-    # Creacion del usuario administrador
-    admin = Usuario("a", "a")
+    # Creación del usuario administrador
+    admin = Usuario("admin", "admin")
     db.session.add(admin)
     db.session.commit()
 
-    # Creacion de un usuario normal
+    # Creación de un usuario normal de prueba
     user = Usuario("us", "us")
     db.session.add(user)
     db.session.commit()
 
-    # Introduccion de peliculas de prueba
+    # Introducción de películas de prueba
     db.session.add(Pelicula("El padrino", "mafia", "padrino.png", 180, 1972, "Francis"))
     db.session.add(Pelicula("El padrino 2", "mafia", "padrino2.png", 190, 1974, "Francis"))
     db.session.add(Pelicula("Matrix", "scifi", "matrix.png", 120, 1999, "Wachosky"))
@@ -30,11 +29,11 @@ if __name__ == "__main__":
     db.session.add(Pelicula("El retorno del rey", "fantasia", "ElRetornoDelRey.png", 180, 2003, "Peter Jackson"))
     db.session.commit()
 
-    # Introduccion de series de prueba
-    db.session.add(Serie("The Boys", "heroes", "jpg", 3, 10, 60))
-    db.session.add(Serie("Juego de tronos", "fantasia", "jpg", 12, 12, 50))
-    db.session.add(Serie("Breaking Bad", "mafia", "pnj", 5, 12, 40))
+    # Introducción de series de prueba
+    db.session.add(Serie("The Boys", "heroes", "TheBoys.png", 3, 10, 60))
+    db.session.add(Serie("Juego de tronos", "fantasia", "JuegoDeTronos.png", 12, 12, 50))
+    db.session.add(Serie("Breaking Bad", "mafia", "BreakingBad.png", 5, 12, 40))
     db.session.commit()
 
-    # LLamada a la function principal
+    # LLamada a la function principal que está en main
     interfazUsuario()

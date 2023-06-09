@@ -1,16 +1,14 @@
-from functools import partial
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox as mb
-
-from models.audiovisual import Pelicula, Serie
-from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
-
+from functools import partial
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 
-import db
+from database import db
 from styles import styles
+from models.audiovisual import Pelicula, Serie
+from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 
 
 def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):

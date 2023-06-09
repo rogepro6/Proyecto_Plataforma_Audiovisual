@@ -1,15 +1,15 @@
 from tkinter import *
 from tkinter import ttk
-
+from tkinter import messagebox as mb
 import matplotlib.pyplot as plt
 from collections import defaultdict
 from itertools import chain
 
-import db
+from database import db
+from styles import styles
 from models.usuarios import Usuario
 from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 from clientes_catalogos import config_grafica
-from styles import styles
 
 
 def add_usuario():
@@ -77,7 +77,7 @@ def gestion_usuarios():
         mensaje["text"] = ""
         try:
             tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Seleccione un usuario"
             return
@@ -95,7 +95,7 @@ def gestion_usuarios():
 
         try:
             tabla.item(tabla.selection())["values"][0]
-        except IndexError as e:
+        except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Seleccione un usuario"
             return
@@ -172,7 +172,7 @@ def gestion_usuarios():
     # ---------------------------#
     ventana_gestion_usuarios = Toplevel()
     ventana_gestion_usuarios.config(width=400, height=320, background=styles.BG_VENTANA)
-    ventana_gestion_usuarios.title("Gestion de Usuarios")  # Titulo de la ventana
+    ventana_gestion_usuarios.title("Gestion de Usuarios")  # Título de la ventana
     ventana_gestion_usuarios.resizable(False, False)
 
     style = ttk.Style()
@@ -240,7 +240,7 @@ def graficas_usuarios(audiovisual):
 
     # crear la grafica de sectores
     fig, ax = plt.subplots()
-    ax.pie(cantidades)
+    ax.pie(cantidades, autopct='%1.1f%%', shadow=True)
     ax.legend(leyendas, loc='lower right')
 
     # aplicar la configuracion
@@ -248,17 +248,12 @@ def graficas_usuarios(audiovisual):
 
 
 def graficas_totales():
-    # Creacion de la ventana para graficas
-    ventana_graficas = Toplevel()
-    ventana_graficas.title("Graficas totales")  # Titulo de la ventana
-    ventana_graficas.resizable(False, False)
-
-    #Creamos un diccionario convinado para calcular los visionados totales
+    # Creamos un diccionario convinado para calcular los visionados totales
     dict_convinado = defaultdict(list)
     for k, v in chain(dict_peliculas_audiovisual.items(), dict_series_audiovisual.items()):
         dict_convinado[k].append(v)
 
-    #Calculamos los datos de las graficas
+    # Calculamos los datos de las gráficas
     nombres_usuario = []
     cantidades_vistas = []
     for k, items in dict_convinado.items():
@@ -269,14 +264,21 @@ def graficas_totales():
             cantidades_vistas.append(total)
             nombres_usuario.append(k[:-7])
 
+    try:
+        # Generamos la gráfica
+        fig, ax = plt.subplots()
+        ax.bar(nombres_usuario, cantidades_vistas)
+        ax.set_title('Cantidades vistas por todos los usuarios', loc="left",
+                     fontdict={'fontsize': 14, 'fontweight': 'bold', 'color': 'tab:blue'})
+        ax.set_ylabel("Numero de vistas", fontdict={'fontsize': 14, 'fontweight': 'bold', 'color': 'tab:blue'})
+        ax.set_yticks(range(0, max(cantidades_vistas) + 1))  # Linea propensa de error si no hay ninguna cantidad
 
-    #print(dict_convinado)
-    #print(dict_peliculas_audiovisual)
-    #print(dict_series_audiovisual)
-    #print(nombres_usuario)
-    #print(cantidades_vistas)
+    except ValueError:
+        mb.showerror("Error", "No existen graficas para mostrar")
+    else:
+        # Creación de la ventana para gráficas
+        ventana_graficas = Toplevel()
+        ventana_graficas.title("Graficas totales")  # Titulo de la ventana
+        ventana_graficas.resizable(False, False)
 
-    fig, ax = plt.subplots()
-    ax.bar(nombres_usuario, cantidades_vistas)
-
-    config_grafica(fig, ventana_graficas)
+        config_grafica(fig, ventana_graficas)

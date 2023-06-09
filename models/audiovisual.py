@@ -1,5 +1,5 @@
-import db
 from sqlalchemy import Column, Integer, String, Float
+from database import db
 
 
 class Audiovisual:
@@ -9,7 +9,7 @@ class Audiovisual:
         self.imagen = imagen
 
 
-class Pelicula (Audiovisual, db.Base):
+class Pelicula(Audiovisual, db.Base):
     db = "database/plataforma.db"
     __tablename__ = "pelicula"
     __table_args = {'sqlite_autoincrement': True}

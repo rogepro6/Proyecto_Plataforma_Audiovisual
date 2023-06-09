@@ -2,7 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox as mb
 from functools import partial
-import db
+
+from database import db
 from styles import styles
 from models.usuarios import Usuario
 from administracion_audiovisual import add_pelicula, add_serie, editar_Serie, editar_Peli
@@ -25,7 +26,7 @@ def interfazUsuario():
     mainFrame.pack()
     mainFrame.config(width=400, height=320, background=styles.BG_VENTANA)
 
-    # Textos y titulos
+    # Textos y títulos
     titulo = ttk.Label(mainFrame, text="PLATAFORMA AUDIOVISUAL", font=styles.ENCABEZADOS,
                        background=styles.BG_ETIQUETA)
     titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=2)
@@ -46,9 +47,9 @@ def interfazUsuario():
     contraEntry = Entry(mainFrame, textvariable=contraUsuario, font=styles.ENTRADAS_DE_TEXTO, show="*")
     contraEntry.grid(column=1, row=2)
 
-    # Botones
+    # Botones de iniciar y registrar usuario
 
-    iniciarSesionButton = Button(mainFrame, text="Iniciar Sesion", foreground=styles.FG_BOTON,
+    iniciarSesionButton = Button(mainFrame, text="Iniciar Sesión", foreground=styles.FG_BOTON,
                                  activeforeground=styles.AFG_BOTON,
                                  activebackground=styles.ABG_BOTON, cursor="hand2", command=iniciarSesion)
     iniciarSesionButton.grid(column=1, row=3, ipadx=5, ipady=5, padx=10, pady=10)
@@ -59,6 +60,7 @@ def interfazUsuario():
 
     registrarButton.grid(column=0, row=3, ipadx=5, ipady=5, padx=10, pady=10)
 
+    # Generamos el loop para que la ventana permanezca siempre abierta
     root.mainloop()
 
 
@@ -66,24 +68,30 @@ def iniciarSesion():
     nombre = nombreUsuario.get()
     password = contraUsuario.get()
     user = db.session.query(Usuario).filter_by(nombre=nombre, contra=password).first()
-    admin = db.session.query(Usuario).filter_by(nombre="a", contra="a").first()
+    admin = db.session.query(Usuario).filter_by(nombre="admin", contra="admin").first()
+
+    # El usuario administrador se crea por defecto por el programa, pero está en la base de datos junto con todos los
+    # usuarios y en esta función se busca al igual que cualquier usuario normal
+
     if user == admin:
-        mb.showinfo("Conectado", "Sesion conectada en modo Administracion")
+        mb.showinfo("Conectado", "Sesión conectada en modo Administración")
         nombreUsuario.set("")
         contraUsuario.set("")
         administracion()
     elif user:
-        mb.showinfo("Conectado", f"Sesion iniciada con exito como {nombre}")
+        mb.showinfo("Conectado", f"Sesión iniciada con éxito como {nombre}")
         nombreUsuario.set("")
         contraUsuario.set("")
         clientes(nombre)
     else:
-        mb.showerror("Error", "Credenciales incorrectas, intentelo de nuevo")
+        mb.showerror("Error", "Credenciales incorrectas, inténtelo de nuevo")
 
 
 def registrarUsuario():
     nombre = nombreUsuario.get()
     password = contraUsuario.get()
+
+    # Comprobaciones de que el usuario escoja un nombre que no exista ya y de que los campos no los deje vacíos
 
     if db.session.query(Usuario).filter_by(nombre=nombre).first():
         mb.showerror("Usuario existente", "Por favor escoja otro nombre")
@@ -97,24 +105,26 @@ def registrarUsuario():
         nuevoUsuario = Usuario(nombre, password)
         db.session.add(nuevoUsuario)
         db.session.commit()
-        mb.showinfo("Registro con exito", f"Se ha registrado el usuario {nombre} con EXITO")
+        mb.showinfo("Registro con éxito", f"Se ha registrado el usuario {nombre} con ÉXITO")
         nombreUsuario.set("")
         contraUsuario.set("")
 
 
 def salir_y_restaurar(ventana):
+    # Pequeña función que minimiza y oculta la ventana principal
     ventana.destroy()
     root.deiconify()
 
 
 def administracion():
-    # Aqui configuramos las opciones de crear los contenidos audiovisuales para el administrador
+    # Aquí configuramos las opciones de crear los contenidos audiovisuales para el administrador asi como la gestion
+    # de usuarios y sus respectivas gráficas
 
     ventana_admin = Toplevel()  # Crear una ventana por delante de la principal
-    root.withdraw()
+    root.withdraw()  # Minimizar la ventana principal
     ventana_admin.config(width=400, height=320, background=styles.BG_VENTANA)
-    ventana_admin.title("Modo administracion")  # Titulo de la ventana
-    ventana_admin.resizable(False, False)  # Redimension de la ventana
+    ventana_admin.title("Modo administración")  # Título de la ventana
+    ventana_admin.resizable(False, False)  # Redimensión de la ventana
 
     titulo = ttk.Label(ventana_admin, text="ADMINISTRACION", background=styles.BG_ETIQUETA, font=styles.ENCABEZADOS)
     titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
@@ -171,11 +181,11 @@ def administracion():
 
 
 def clientes(nombre):
-    # Aqui configuramos las opciones que tienen los clientes
+    # Aquí configuramos las opciones que tienen los clientes
     ventana_usuarios = Toplevel()  # Crear una ventana por delante de la principal
     ventana_usuarios.config(width=400, height=320, background=styles.BG_VENTANA)
-    root.withdraw()
-    ventana_usuarios.title("Seccion de Usuarios")  # Titulo de la ventana
+    root.withdraw()  # Minimizar la ventana principal
+    ventana_usuarios.title("Sección de Usuarios")  # Título de la ventana
     ventana_usuarios.resizable(False, False)
 
     titulo = Label(ventana_usuarios, text=f"Usuario {nombre}", background=styles.BG_ETIQUETA, font=styles.ENCABEZADOS)
