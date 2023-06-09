@@ -1,20 +1,9 @@
-from collections import defaultdict
-from itertools import chain
+from tkinter import *
 
-d1 = {"Python": [1, 2], "C": [3, 4, 5]}
-d2 = {"Java": [4], "C": [3]}
+root = Tk()
+img = PhotoImage(file="recursos/padrino.png")
+label_imagen = Label(root, image=img)
+label_imagen.pack()
+print(img)
 
-dict3 = defaultdict(list)
-for k, v in chain(d1.items(), d2.items()):
-    dict3[k].append(v)
-
-print(dict3)
-totales = []
-for k, items in dict3.items():
-    total = 0
-    if k == "C":
-        for item in items:
-            total += len(item)
-        totales.append(total)
-
-print(totales)
+root.mainloop()

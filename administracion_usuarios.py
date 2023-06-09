@@ -1,12 +1,12 @@
 from tkinter import *
 from tkinter import ttk
 
-import db
-from models.usuarios import Usuario
 import matplotlib.pyplot as plt
 from collections import defaultdict
 from itertools import chain
 
+import db
+from models.usuarios import Usuario
 from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisual
 from clientes_catalogos import config_grafica
 from styles import styles

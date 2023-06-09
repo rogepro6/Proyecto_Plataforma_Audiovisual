@@ -35,6 +35,24 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
     tabla.heading(column="#2", text="Categoria", anchor=CENTER)
     tabla.heading(column="#3", text="Imagen", anchor=CENTER)
 
+    def ver_imagen():
+        try:
+            foto = tabla.item(tabla.selection())["values"][2]
+            nombre_pelicula = tabla.item(tabla.selection())["values"][0]
+            print(foto)
+        except IndexError:
+            mensaje["fg"] = "red"
+            mensaje["text"] = "Seleccione un registro"
+        else:
+            ventana_imagen = Toplevel()
+            ventana_imagen.title(f"Imagen de portada de {nombre_pelicula}")  # Titulo de la ventana
+            ventana_imagen.config(width=400, height=320, background=styles.BG_VENTANA)
+            ventana_imagen.resizable(True, True)
+            img = PhotoImage(file=f"recursos/{str(foto)}")
+            label_imagen = Label(ventana_imagen, image=img)
+            label_imagen.pack()
+            ventana_imagen.mainloop()
+
     def eliminar(diccionario, tipo, nombre):
         try:
             diccionario[str(nombre) + tipo].remove(
@@ -123,11 +141,16 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
     mensaje = Label(ventana_mostrar, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(row=1, column=0, columnspan=2, sticky=W + E)
 
+    imagen_portada = Button(ventana_mostrar, text="Ver imagen portada", foreground=styles.FG_BOTON,
+                            activeforeground=styles.AFG_BOTON,
+                            activebackground=styles.ABG_BOTON, command=ver_imagen)
+    imagen_portada.grid(row=3, column=0, columnspan=3, sticky=W + E)
+
     boton_salir = Button(ventana_mostrar, text="Salir", foreground=styles.FG_BOTON,
                          activeforeground=styles.AFG_BOTON,
                          activebackground=styles.ABG_BOTON_SALIR,
                          command=lambda: ventana_mostrar.destroy())
-    boton_salir.grid(row=3, column=0, columnspan=3, sticky=W + E)
+    boton_salir.grid(row=4, column=0, columnspan=3, sticky=W + E)
 
 
 def catalogo_completo(audiovisual, nombre):
