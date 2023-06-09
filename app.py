@@ -31,9 +31,9 @@ if __name__ == "__main__":
     db.session.commit()
 
     # Introduccion de series de prueba
-    db.session.add(Serie("The Boys", "heroes", "jpg", 3, 10, 60))
-    db.session.add(Serie("Juego de tronos", "fantasia", "jpg", 12, 12, 50))
-    db.session.add(Serie("Breaking Bad", "mafia", "pnj", 5, 12, 40))
+    db.session.add(Serie("The Boys", "heroes", "TheBoys.png", 3, 10, 60))
+    db.session.add(Serie("Juego de tronos", "fantasia", "JuegoDeTronos.png", 12, 12, 50))
+    db.session.add(Serie("Breaking Bad", "mafia", "BreakingBad.png", 5, 12, 40))
     db.session.commit()
 
     # LLamada a la function principal
