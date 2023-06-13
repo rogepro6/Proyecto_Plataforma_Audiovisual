@@ -21,6 +21,10 @@ def interfazUsuario():
     root.title("Login Usuarios")
     root.resizable(False, False)
 
+    #Icono de la ventana
+    icono = PhotoImage(file="recursos/multimedia.png")
+    root.iconphoto(True, icono)
+
     # Frame Principal
     mainFrame = Frame(root)
     mainFrame.pack()

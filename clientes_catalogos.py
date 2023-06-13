@@ -12,10 +12,12 @@ from clientes_busquedas import dict_peliculas_audiovisual, dict_series_audiovisu
 
 
 def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
+
+    #Creacion de la ventana y configuración
     ventana_mostrar = Toplevel()
     ventana_mostrar.config(width=400, height=320, background=styles.BG_VENTANA)
-    ventana_mostrar.title("Resultados busqueda")  # Titulo de la ventana
-    ventana_mostrar.resizable(True, True)
+    ventana_mostrar.title("Resultados busqueda")  # Título de la ventana
+    ventana_mostrar.resizable(False, False)
 
     style = ttk.Style()
     style.configure("mystyle.Treeview", highlightthickness=0, bd=0,
@@ -24,7 +26,7 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
                     font=styles.TABLAS_CABECERAS)  # Se modifica la fuente de las cabeceras
     style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})])
 
-    # Estructura de la tabla de Peliculas
+    # Estructura de la tabla general
     tabla = ttk.Treeview(ventana_mostrar, height=10, columns=["#0", "#1", "#2", "#3", "#4", "#5", "#6"],
                          style="mystyle.Treeview")
     tabla.grid(row=0, column=0, ipadx=5, ipady=5, padx=10, pady=10)
@@ -34,16 +36,16 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
     tabla.heading(column="#3", text="Imagen", anchor=CENTER)
 
     def ver_imagen():
+        # Función que muestra en la pantalla la imagen de la carpeta recursos de cada película o serie
         try:
             foto = tabla.item(tabla.selection())["values"][2]
-            nombre_pelicula = tabla.item(tabla.selection())["values"][0]
-            print(foto)
+            nombre_registro = tabla.item(tabla.selection())["values"][0]
         except IndexError:
             mensaje["fg"] = "red"
             mensaje["text"] = "Seleccione un registro"
         else:
             ventana_imagen = Toplevel()
-            ventana_imagen.title(f"Imagen de portada de {nombre_pelicula}")  # Titulo de la ventana
+            ventana_imagen.title(f"Imagen de portada de {nombre_registro}")  # Título de la ventana
             ventana_imagen.config(width=400, height=320, background=styles.BG_VENTANA)
             ventana_imagen.resizable(True, True)
             img = PhotoImage(file=f"recursos/{str(foto)}")
@@ -52,6 +54,7 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
             ventana_imagen.mainloop()
 
     def eliminar(diccionario, tipo, nombre):
+        # Función para eliminar los registros de cada una de las listas de los usuarios
         try:
             diccionario[str(nombre) + tipo].remove(
                 tabla.item(tabla.selection())["values"][0])
@@ -69,7 +72,7 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
             mensaje["text"] = "Registro eliminado"
 
     if audiovisual == "Pelicula":
-
+        # Parte de la tabla asociado a las películas
         tabla.heading(column="#4", text="Duracion", anchor=CENTER)
         tabla.heading(column="#5", text="Año", anchor=CENTER)
         tabla.heading(column="#6", text="Director", anchor=CENTER)
@@ -103,7 +106,7 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
             boton_borrar.grid(row=2, column=0, columnspan=3, sticky=W + E)
 
     elif audiovisual == "Serie":
-
+        # Parte de la tabla asociado a las series
         tabla.heading(column="#4", text="Temporadas", anchor=CENTER)
         tabla.heading(column="#5", text="Capitulos", anchor=CENTER)
         tabla.heading(column="#6", text="Duracion de capitulos", anchor=CENTER)
@@ -139,7 +142,7 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
     mensaje = Label(ventana_mostrar, text="", fg="red", background=styles.BG_VENTANA)
     mensaje.grid(row=1, column=0, columnspan=2, sticky=W + E)
 
-    imagen_portada = Button(ventana_mostrar, text="Ver imagen portada", foreground=styles.FG_BOTON,
+    imagen_portada = Button(ventana_mostrar, text="Ver imagen", foreground=styles.FG_BOTON,
                             activeforeground=styles.AFG_BOTON,
                             activebackground=styles.ABG_BOTON, command=ver_imagen)
     imagen_portada.grid(row=3, column=0, columnspan=3, sticky=W + E)
@@ -152,6 +155,7 @@ def mostrar_catalogos(resultados, audiovisual, nombre, tipo=None):
 
 
 def catalogo_completo(audiovisual, nombre):
+    # Esta función llama a la función mostrar_catálogos enviando todas las películas o series de la BBDD
     if audiovisual == "Pelicula":
         peliculas = db.session.query(Pelicula).all()
         mostrar_catalogos(peliculas, "Pelicula", nombre)
@@ -161,6 +165,7 @@ def catalogo_completo(audiovisual, nombre):
 
 
 def listas_usuarios(audiovisual, tipo, nombre):
+    # Esta función es encargada de llamar a la función mostrar_catálogos con los parámetros requeridos
     if audiovisual == "Pelicula":
         peliculas = []
         try:
@@ -169,7 +174,7 @@ def listas_usuarios(audiovisual, tipo, nombre):
                 peliculas.append(db.session.query(Pelicula).filter(Pelicula.titulo == i).first())
             mostrar_catalogos(peliculas, "Pelicula", nombre, tipo=tipo)
         except KeyError:
-            mb.showwarning("Error", "No tiene ninunga pelicula en esta seccion")
+            mb.showwarning("Error", "No tiene ninguna película en esta sección")
     elif audiovisual == "Serie":
         series = []
         try:
@@ -178,10 +183,13 @@ def listas_usuarios(audiovisual, tipo, nombre):
                 series.append(db.session.query(Serie).filter(Serie.titulo == i).first())
             mostrar_catalogos(series, "Serie", nombre, tipo=tipo)
         except KeyError:
-            mb.showwarning("Error", "No tiene ninunga serie en esta seccion")
+            mb.showwarning("Error", "No tiene ninguna serie en esta sección")
 
 
 def config_grafica(grafica, ventana):
+    # Esta función la llaman todas las demás gráficas del programa y lo que hace es recibir la propia gráfica y la
+    # ventana donde será colocada y las coloca en el área de trabajo y crea una barra de iconos que deja realizar
+    # algunos ajustes sobre la gráfica
     canvas = FigureCanvasTkAgg(grafica, ventana)  # CREAR AREA DE DIBUJO DE TKINTER.
     canvas.draw()
     canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
@@ -196,26 +204,30 @@ def config_grafica(grafica, ventana):
 
 def grafica_vision(nombre):
     try:
-        print(nombre)
+        # Líneas propensas de error si el usuario intenta visualizar las gráficas sin haber introducido ninguna
+        # película y serie en la sección de vistas
         pelis_vistas = dict_peliculas_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
         series_vistas = dict_series_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
     except KeyError:
         mb.showwarning("Error", "No existen estadísticas para mostrar. Debe haber visto al menos una de cada para "
                                 "mostrar sus graficas")
     else:
+        # Si no hay error calculamos el tamaño de cada lista (series y pelis)
         numero_pelis = len(pelis_vistas)
         numero_series = len(series_vistas)
 
+        # Creamos la ventana
         ventana_grafica = Toplevel()  # Crear una ventana por delante de la principal
         ventana_grafica.title(f"Grafica de visiones de {nombre}")  # Titulo de la ventana
         ventana_grafica.resizable(True, True)
 
+        # Aquí comprobamos que lista es más grande para luego establecer el rango del eje Y de la gráfica
         if numero_series >= numero_pelis:
             rango = numero_series
         else:
             rango = numero_pelis
 
-        # configuracion de la gráfica
+        # Configuración de la gráfica
         fig, ax = plt.subplots()
         ax.bar(["Series", "Peliculas"], [numero_series, numero_pelis], color="indianred")
         ax.set_title('Cantidades vistas', loc="left",
@@ -228,20 +240,26 @@ def grafica_vision(nombre):
 
 def grafica_tiempo(nombre):
     try:
-        pelis_vistas = dict_peliculas_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
-        series_vistas = dict_series_audiovisual[str(nombre) + "_vistas"]  # linea propensa de error
+        # Líneas propensas de error si el usuario intenta visualizar las gráficas sin haber introducido ninguna
+        # película y serie en la sección de vistas
+        pelis_vistas = dict_peliculas_audiovisual[str(nombre) + "_vistas"]
+        series_vistas = dict_series_audiovisual[str(nombre) + "_vistas"]
     except KeyError:
         mb.showwarning("Error", "No existen estadísticas para mostrar. Debe haber visto al menos una de cada para "
                                 "mostrar sus graficas")
     else:
+        # Si no hay error creamos las variables acumuladas de tiempo
         duracion_peliculas_vistas = 0
         duracion_series_vistas = 0
 
+        #Creamos la ventana
         ventana_grafica = Toplevel()  # Crear una ventana por delante de la principal
-        ventana_grafica.title(f"Grafica de tiempo de {nombre}")  # Titulo de la ventana
+        ventana_grafica.title(f"Grafica de tiempo de {nombre}")  # Título de la ventana
         ventana_grafica.resizable(True, True)
 
-        # calcular las metricas
+        # Calcular las métricas; para las películas simplemente sumamos su duración y para las series suponemos que
+        # cuando el usuario la marca como vista es que ha visto la serie entera asi que multiplicamos la duración del
+        # capítulo por el número de capítulos y por el número de temporadas
         for i in pelis_vistas:
             pelicula = db.session.query(Pelicula).filter(Pelicula.titulo == i).first()
             duracion_peliculas_vistas += pelicula.duracion
@@ -253,7 +271,7 @@ def grafica_tiempo(nombre):
         duracion_peliculas_vistas /= 60  # Conversion a horas para la gráfica
         duracion_series_vistas /= 60  # Conversion a horas para la gráfica
 
-        # configuracion de la gráfica
+        # Configuración de la gráfica
         fig, ax = plt.subplots()
         ax.barh(["Series", "Peliculas"], [duracion_series_vistas, duracion_peliculas_vistas], color="indianred")
         ax.set_title('Tiempo de visionado', loc="left",
@@ -264,13 +282,17 @@ def grafica_tiempo(nombre):
 
 
 def catalogos(audiovisual, nombre):
+    # Función que recibe dos parámetros, el tipo de audiovisual(película o serie) y el nombre del usuario. La
+    # función se llama desde el main
     if audiovisual == "pelicula":
 
+        # Creación de la ventana y configuración
         ventana_catalogo_peliculas = Toplevel()  # Crear una ventana por delante de la principal
         ventana_catalogo_peliculas.config(width=400, height=320, background=styles.BG_VENTANA)
-        ventana_catalogo_peliculas.title(f"Catalogo de peliculas de {nombre}")  # Titulo de la ventana
-        ventana_catalogo_peliculas.resizable(True, True)
+        ventana_catalogo_peliculas.title(f"Catalogo de peliculas de {nombre}")  # Título de la ventana
+        ventana_catalogo_peliculas.resizable(False, False)
 
+        # Etiquetas y botones
         titulo = Label(ventana_catalogo_peliculas, text=f"Usuario {nombre}", font=styles.ENCABEZADOS,
                        background=styles.BG_ETIQUETA)
         titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
@@ -303,11 +325,13 @@ def catalogos(audiovisual, nombre):
 
     elif audiovisual == "serie":
 
+        # Creación de la ventana y configuración
         ventana_catalogo_series = Toplevel()  # Crear una ventana por delante de la principal
         ventana_catalogo_series.title(f"Catalogo de series de {nombre}")  # Titulo de la ventana
         ventana_catalogo_series.config(width=400, height=320, background=styles.BG_VENTANA)
-        ventana_catalogo_series.resizable(True, True)
+        ventana_catalogo_series.resizable(False, False)
 
+        # Etiquetas y botones
         titulo = Label(ventana_catalogo_series, text=f"Usuario {nombre}", font=styles.ENCABEZADOS,
                        background=styles.BG_ETIQUETA)
         titulo.grid(column=0, row=0, padx=10, pady=10, columnspan=4, sticky=W + E)
