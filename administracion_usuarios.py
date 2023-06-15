@@ -14,7 +14,7 @@ from clientes_catalogos import config_grafica
 
 def add_usuario():
     def registrar_usuario():
-        # Comprobacion de que se rellenan ambos campos
+        # Comprobación de que se rellenan ambos campos
         if len(nombre_Entry.get()) and len(pass_Entry.get()):
 
             usuario = Usuario(
@@ -47,7 +47,7 @@ def add_usuario():
 
     nombre_Entry = Entry(ventana_admin_usuario, textvariable=StringVar(), font=styles.ENTRADAS_DE_TEXTO)
     nombre_Entry.grid(column=1, row=1, ipadx=5, ipady=5, padx=10, pady=10)
-    pass_Entry = Entry(ventana_admin_usuario, textvariable=StringVar(), font=styles.ENTRADAS_DE_TEXTO)
+    pass_Entry = Entry(ventana_admin_usuario, textvariable=StringVar(), show="*", font=styles.ENTRADAS_DE_TEXTO)
     pass_Entry.grid(column=1, row=2, ipadx=5, ipady=5, padx=10, pady=10)
 
     # Botones de acción
@@ -237,10 +237,6 @@ def gestion_usuarios():
 # En esta función configuramos las gráficas de sectores para ver el total de películas o series vistas por cada uno
 # de los clientes y su porcentaje con respecto al resto
 def graficas_usuarios(audiovisual):
-    # Creación de la ventana para gráficas
-    ventana_graficas = Toplevel()
-    ventana_graficas.title(f"{audiovisual} vistas por los Usuarios")  # Titulo de la ventana
-    ventana_graficas.resizable(False, False)
 
     # calcular las leyendas y las cantidades de visualizaciones
     leyendas = []
@@ -256,13 +252,22 @@ def graficas_usuarios(audiovisual):
                 leyendas.append(i[:-7])
                 cantidades.append(len(x))
 
-    # Creación de la gráfica de sectores
-    fig, ax = plt.subplots()
-    ax.pie(cantidades, autopct='%1.1f%%', shadow=True)  # Añadimos el % de cada usuario
-    ax.legend(leyendas, loc='lower right')
+    # Comprobación de que haya cantidades
+    if cantidades == [0]:
+        mb.showerror("Error", "No existen graficas para mostrar")
+    else:
+        # Creación de la ventana para gráficas
+        ventana_graficas = Toplevel()
+        ventana_graficas.title(f"{audiovisual} vistas por los Usuarios")  # Titulo de la ventana
+        ventana_graficas.resizable(False, False)
 
-    # Aplicar la configuración
-    config_grafica(fig, ventana_graficas)
+        # Creación de la gráfica de sectores
+        fig, ax = plt.subplots()
+        ax.pie(cantidades, autopct='%1.1f%%', shadow=True)  # Añadimos el % de cada usuario
+        ax.legend(leyendas, loc='lower right')
+
+        # Aplicar la configuración
+        config_grafica(fig, ventana_graficas)
 
 
 # En esta función configuramos la gráfica de visionados totales de ambas categorías de cada uno de los clientes que

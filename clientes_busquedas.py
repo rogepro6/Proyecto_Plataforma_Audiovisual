@@ -11,7 +11,7 @@ from models.audiovisual import Pelicula, Serie
 # {"nombre de usuario_vistas":[lista de nombres de películas/series que ha visto el usuario],
 # "nombre de usuario_favoritos":[lista de nombres de películas/series que quiere ver el usuario más adelante]}
 
-# Cada una de estas claves se iran generando a medida que los usuarios añadan más contenidos
+# Cada una de estas claves se iran generando a medida que los nuevos usuarios añadan más contenidos
 
 dict_peliculas_audiovisual = {}
 dict_series_audiovisual = {}
@@ -226,8 +226,8 @@ def mostrar_resultados(resultados, audiovisual, nombre):
         mensaje.grid(row=1, column=0, columnspan=2, sticky=W + E)
 
 
-# Esta es la función encargada de realizar las búsquedas en la BBDD por titulo y categoría
-# Recibe el tipo de busqueda (pelicula o serie) y el nombre del usuario
+# Esta es la función encargada de realizar las búsquedas en la BBDD por título y categoría
+# Recibe el tipo de búsqueda (película o serie) y el nombre del usuario
 def buscar_audiovisual(audiovisual, nombre):
 
     def busqueda(tipo, nombre_cliente):
